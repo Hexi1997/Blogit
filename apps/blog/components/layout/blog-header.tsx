@@ -6,14 +6,17 @@ export function BlogHeader() {
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 w-full max-w-[766px] items-center justify-between px-4">
         <Link href="/" className="text-lg font-bold">
-          <Image
-            src="/icons/combination-mark.svg"
-            alt="Blogit"
-            width={132}
-            height={32}
-            className="h-8 w-auto"
-            priority
-          />
+          <div className="flex items-center gap-1">
+            <Image
+              src="/icons/logo-mark.svg"
+              alt="Blogit"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+              priority
+            />
+            <span className="bg-black text-lg text-white font-anta">BLOGIT</span>
+          </div>
         </Link>
         <nav>
           <Link

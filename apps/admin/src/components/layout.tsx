@@ -27,7 +27,12 @@ export function Layout() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex h-14 max-w-[766px] items-center justify-between px-4">
           <Link to="/" className="text-lg font-bold">
-            <img src="/icons/combination-mark.svg" alt="Blog Admin" className="h-8" />
+          <div className="flex items-center gap-1">
+            {/* TODO: change to your own logo */}
+            <img src="/icons/logo-mark.svg" alt="Blog Admin" className="h-8" />
+            <span className="text-lg bg-black text-white font-anta">BLOGIT</span>
+          </div>
+            {/* <img src="/icons/combination-mark.svg" alt="Blog Admin" className="h-8" /> */}
           </Link>
           <div className="flex items-center gap-3">
             {user && (

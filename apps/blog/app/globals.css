@@ -7,6 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-anta: var(--font-anta);
   --font-sans: var(--font-wix-text);
   --font-display: var(--font-wix-display);
   --font-onest: var(--font-onest);
@@ -64,6 +65,10 @@ html {
 
 @utility font-geist-mono {
   font-family: var(--font-geist-mono), system-ui, sans-serif;
+}
+
+@utility font-anta {
+  font-family: var(--font-anta), system-ui, sans-serif;
 }
 
 :root {

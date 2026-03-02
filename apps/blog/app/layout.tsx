@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist,Geist_Mono as GeistMono } from "next/font/google";
+import { Anta, Geist, Geist_Mono as GeistMono } from "next/font/google";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -10,6 +10,12 @@ const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+});
+
+const anta = Anta({
+  variable: "--font-anta",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const geistMono = GeistMono({
@@ -60,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geist.variable} ${geistMono.variable} antialiased`}
+        className={`${geist.variable} ${anta.variable} ${geistMono.variable} antialiased`}
       >
         <div className="min-h-screen bg-background">
           <BlogHeader />
