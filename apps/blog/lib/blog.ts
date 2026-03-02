@@ -121,6 +121,22 @@ function extractPlainTextDescription(
   return text;
 }
 
+function normalizeTags(rawTags: unknown): string[] {
+  if (!rawTags) return [];
+  if (Array.isArray(rawTags)) {
+    return rawTags
+      .map((tag) => (typeof tag === "string" ? tag.trim() : ""))
+      .filter(Boolean);
+  }
+  if (typeof rawTags === "string") {
+    return rawTags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
 /**
  * 获取所有博客文章的元数据（用于列表页）
  */
@@ -176,6 +192,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
 
       // 透传外部来源链接（如果有）
       const source = matterResult.data.source;
+      const tags = normalizeTags(matterResult.data.tags);
 
       return {
         slug,
@@ -186,6 +203,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
         cover,
         sortIndex: matterResult.data.sortIndex ?? 0,
         source,
+        tags,
       };
     })
     .filter((post) => post !== null) as BlogMetadata[];
@@ -305,6 +323,7 @@ export async function getBlogPostBySlug(
 
     // 透传外部来源链接（如果有）
     const source = matterResult.data.source;
+    const tags = normalizeTags(matterResult.data.tags);
 
     // 判断是否为置顶文章（需要获取所有文章并排序）
     const allPosts = getAllBlogPosts();
@@ -321,6 +340,7 @@ export async function getBlogPostBySlug(
       content: contentHtml,
       sortIndex: matterResult.data.sortIndex ?? 0,
       source,
+      tags,
       pinned,
     };
   } catch (error) {

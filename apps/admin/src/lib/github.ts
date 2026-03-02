@@ -56,7 +56,7 @@ function parseFrontmatter(raw: string): { frontmatter: BlogFrontmatter; content:
   const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!match) {
     return {
-      frontmatter: { title: "Untitled", date: new Date().toISOString().slice(0, 10) },
+      frontmatter: { title: "Untitled", date: new Date().toISOString().slice(0, 10), tags: [] },
       content: raw,
     };
   }
@@ -65,17 +65,49 @@ function parseFrontmatter(raw: string): { frontmatter: BlogFrontmatter; content:
   const content = match[2].trim();
 
   const fm: Record<string, string> = {};
-  for (const line of yamlBlock.split("\n")) {
+  const yamlLines = yamlBlock.split("\n");
+
+  for (let i = 0; i < yamlLines.length; i += 1) {
+    const line = yamlLines[i];
     const colonIdx = line.indexOf(":");
     if (colonIdx === -1) continue;
     const key = line.slice(0, colonIdx).trim();
     let val = line.slice(colonIdx + 1).trim();
+
+    if (key === "tags") {
+      if (!val) {
+        const tagValues: string[] = [];
+        for (let j = i + 1; j < yamlLines.length; j += 1) {
+          const tagMatch = yamlLines[j].match(/^\s*-\s*(.+)$/);
+          if (!tagMatch) break;
+          let tag = tagMatch[1].trim();
+          if ((tag.startsWith('"') && tag.endsWith('"')) || (tag.startsWith("'") && tag.endsWith("'"))) {
+            tag = tag.slice(1, -1);
+          }
+          if (tag) tagValues.push(tag);
+          i = j;
+        }
+        fm.tags = tagValues.join(",");
+        continue;
+      }
+
+      if (val.startsWith("[") && val.endsWith("]")) {
+        val = val.slice(1, -1);
+      }
+    }
+
     // Strip surrounding quotes
     if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
       val = val.slice(1, -1);
     }
+
     fm[key] = val;
   }
+
+  const tags = (fm.tags || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 
   return {
     frontmatter: {
@@ -84,6 +116,7 @@ function parseFrontmatter(raw: string): { frontmatter: BlogFrontmatter; content:
       cover: fm.cover,
       sortIndex: fm.sortIndex ? parseInt(fm.sortIndex, 10) : undefined,
       source: fm.source,
+      tags,
     },
     content,
   };
@@ -115,6 +148,12 @@ function serializeFrontmatter(fm: BlogFrontmatter): string {
   if (fm.cover) lines.push(`cover: ${escapeYamlString(fm.cover)}`);
   if (fm.sortIndex !== undefined) lines.push(`sortIndex: ${fm.sortIndex}`);
   if (fm.source) lines.push(`source: ${escapeYamlString(fm.source)}`);
+  if (fm.tags && fm.tags.length > 0) {
+    lines.push("tags:");
+    for (const tag of fm.tags) {
+      lines.push(`  - ${escapeYamlString(tag)}`);
+    }
+  }
   lines.push("---");
   return lines.join("\n");
 }
@@ -153,6 +192,7 @@ export async function listBlogs(token: string): Promise<PostItem[]> {
         slug: dir.name,
         title: frontmatter.title,
         date: frontmatter.date,
+        tags: frontmatter.tags || [],
       };
     })
   );

@@ -105,6 +105,18 @@ export function BlogListPage() {
                 <p className="mt-1 text-[13px] text-muted-foreground">
                   {blog.date} &middot; {blog.slug}
                 </p>
+                {blog.tags && blog.tags.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {blog.tags.map((tag) => (
+                      <span
+                        key={`${blog.slug}-${tag}`}
+                        className="rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="ml-4 flex items-center gap-2">
                 <Button asChild variant="ghost" size="sm">

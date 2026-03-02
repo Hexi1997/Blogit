@@ -19,6 +19,7 @@ export function BlogEditorPage() {
   const [frontmatter, setFrontmatter] = useState<BlogFrontmatter>({
     title: "",
     date: new Date().toISOString().slice(0, 10),
+    tags: [],
   });
   const [content, setContent] = useState("");
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);

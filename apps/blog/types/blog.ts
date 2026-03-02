@@ -8,6 +8,7 @@ export interface BlogPost {
   content: string;
   sortIndex?: number;
   source?: string;
+  tags?: string[];
   pinned?: boolean; // 是否为置顶文章（排序前四名）
 }
 
@@ -20,5 +21,6 @@ export interface BlogMetadata {
   cover: string;
   sortIndex?: number;
   source?: string;
+  tags?: string[];
   pinned?: boolean; // 是否为置顶文章（排序前四名）
 }

@@ -110,10 +110,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </h1>
 
       <div className="flex gap-4 flex-wrap items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <time dateTime={post.date} className="text-sm text-neutral-400">
             {format(new Date(post.date), "yyyy-MM-dd")}
           </time>
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {post.tags.map((tag) => (
+                <Link
+                  key={`${post.slug}-${tag}`}
+                  href={`/?tag=${encodeURIComponent(tag)}`}
+                  className="text-xs text-neutral-500"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         <ShareButtons url={postUrl} title={post.title} />
 

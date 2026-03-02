@@ -27,6 +27,7 @@ export function FrontmatterForm({
   onSlugChange,
 }: FrontmatterFormProps) {
   const slugManuallyEdited = useRef(false);
+  const tagsInputRef = useRef<HTMLInputElement>(null);
 
   function handleTitleChange(title: string) {
     onChange({ ...frontmatter, title });
@@ -43,6 +44,51 @@ export function FrontmatterForm({
       .replace(/-+/g, "-");
     slugManuallyEdited.current = cleaned.length > 0;
     onSlugChange(cleaned);
+  }
+
+  function addTag(rawTag: string) {
+    const tag = rawTag.trim();
+    if (!tag) return;
+
+    const tags = frontmatter.tags || [];
+    const duplicate = tags.some((item) => item.toLowerCase() === tag.toLowerCase());
+    if (duplicate) return;
+
+    onChange({ ...frontmatter, tags: [...tags, tag] });
+  }
+
+  function removeTag(tagToRemove: string) {
+    const tags = (frontmatter.tags || []).filter((tag) => tag !== tagToRemove);
+    onChange({ ...frontmatter, tags });
+  }
+
+  function commitTagsFromInput() {
+    if (!tagsInputRef.current) return;
+    const rawValue = tagsInputRef.current.value;
+    if (!rawValue.trim()) return;
+
+    const nextTags = rawValue
+      .split(/[,\uFF0C]/)
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    for (const tag of nextTags) {
+      addTag(tag);
+    }
+    tagsInputRef.current.value = "";
+  }
+
+  function handleTagsKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.key === "," || e.key === "，") {
+      e.preventDefault();
+      commitTagsFromInput();
+      return;
+    }
+
+    if (e.key === "Backspace" && tagsInputRef.current?.value === "") {
+      const tags = frontmatter.tags || [];
+      if (tags.length === 0) return;
+      onChange({ ...frontmatter, tags: tags.slice(0, -1) });
+    }
   }
 
   return (
@@ -84,6 +130,40 @@ export function FrontmatterForm({
             onChange={(e) => onChange({ ...frontmatter, date: e.target.value })}
             className="mt-1.5"
           />
+        </div>
+
+        <div className="sm:col-span-2">
+          <Label htmlFor="tags" className="text-base">Tags</Label>
+          <div className="mt-1.5 rounded-md border border-input bg-transparent px-2 py-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {(frontmatter.tags || []).map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-foreground"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="text-muted-foreground hover:text-foreground"
+                    aria-label={`Remove tag ${tag}`}
+                  >
+                    x
+                  </button>
+                </span>
+              ))}
+              <Input
+                id="tags"
+                ref={tagsInputRef}
+                className="h-7 min-w-[180px] flex-1 border-0 bg-transparent px-1 py-0 shadow-none focus-visible:ring-0"
+                onKeyDown={handleTagsKeyDown}
+                onBlur={commitTagsFromInput}
+              />
+            </div>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Press Enter or comma to add tag.
+          </p>
         </div>
       </div>
     </div>

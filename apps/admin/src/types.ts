@@ -16,12 +16,14 @@ export interface BlogFrontmatter {
   cover?: string;
   sortIndex?: number;
   source?: string;
+  tags?: string[];
 }
 
 export interface PostItem {
   slug: string;
   title: string;
   date: string;
+  tags?: string[];
 }
 
 export interface PendingImage {
