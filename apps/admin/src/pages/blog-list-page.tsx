@@ -106,11 +106,11 @@ export function BlogListPage() {
                   {blog.date} &middot; {blog.slug}
                 </p>
                 {blog.tags && blog.tags.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
                     {blog.tags.map((tag) => (
                       <span
                         key={`${blog.slug}-${tag}`}
-                        className="rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
+                        className="text-[11px] text-muted-foreground"
                       >
                         #{tag}
                       </span>

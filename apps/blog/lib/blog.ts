@@ -175,7 +175,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
 
       // 如果还是没有，使用默认图片
       if (!cover) {
-        cover = "/default-og-image.webp";
+        cover = "/default-cover.png";
       }
 
       // 只处理相对路径（不是绝对路径也不是外部 URL）
@@ -307,7 +307,7 @@ export async function getBlogPostBySlug(
 
     // 如果还是没有，使用默认图片
     if (!cover) {
-      cover = "/default-og-image.webp";
+      cover = "/default-cover.png";
     }
 
     // 只处理相对路径（不是绝对路径也不是外部 URL）
