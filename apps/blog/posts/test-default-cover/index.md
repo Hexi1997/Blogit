@@ -21,8 +21,6 @@ date: '2026-03-02'
 const a = 1;
 ```
 
-![1.00](assets/img_1.webp)
-
-![0.78](assets/img_1.png)
+![1.00](assets/img_1.webp "test")
 
 
