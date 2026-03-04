@@ -9,7 +9,7 @@ export function BlogHeader() {
           <div className="flex items-center gap-1">
             <Image
               src="/icons/logo-mark.svg"
-              alt="Blogit"
+              alt="BLOGIT"
               width={32}
               height={32}
               className="h-8 w-8"

@@ -29,15 +29,15 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || ""
   ),
   title: {
-    default: "Blogit",
-    template: "%s - Blogit",
+    default: "BLOGIT",
+    template: "%s - BLOGIT",
   },
   openGraph: {
     type: "website",
     locale: "zh_CN",
     url: "/",
-    siteName: "Blogit",
-    title: "Blogit",
+    siteName: "BLOGIT",
+    title: "BLOGIT",
   },
   twitter: {
     card: "summary_large_image"
