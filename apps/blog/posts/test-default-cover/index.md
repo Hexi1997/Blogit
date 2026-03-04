@@ -59,7 +59,7 @@ export function BlogEditorPage() {
       .then((blog) => {
         setFrontmatter(blog.frontmatter);
 
-        // Replace relative asset paths (assets/xxx or ./assets/xxx) with GitHub raw URLs
+        // Replace relative asset paths (assets/xxx or assets/xxx) with GitHub raw URLs
         const rawBase = `https://raw.githubusercontent.com/${BLOG_REPO_CONFIG.owner}/${BLOG_REPO_CONFIG.repo}/${BLOG_REPO_CONFIG.branch}/${BLOG_REPO_CONFIG.blogPath}/${paramSlug}`;
         const displayContent = blog.content.replace(
           /(?<!\/)(?:\.\/)?assets\/([^\s)]+)/g,
@@ -181,6 +181,11 @@ export function BlogEditorPage() {
       />
     </div>
   );
+}
+const a = 1;
+let b = 2;
+do while() {
+  
 }
 ```
 
