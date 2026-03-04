@@ -1,8 +1,6 @@
 ---
 title: 'Test default cover'
 date: '2026-03-02'
-tags:
-  - 'tesst'
 ---
 
 这次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：
@@ -19,10 +17,3 @@ tags:
     
 
 这让我意识到，我对 Zustand 的理解是错的。
-
-| 2 | 3 | 4 |
-| --- | --- | --- |
-| 22 |   |   |
-|   |   |   |
-
-![](assets/img_2.webp)
