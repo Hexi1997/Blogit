@@ -5,7 +5,7 @@ tags:
   - 'tesst'
 ---
 
-这222次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：
+这次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：
 
 > 为什么我可以在组件外面通过 `store.getState().setXXX()` 修改状态，而且组件里的值还能自动更新？
 
@@ -19,7 +19,5 @@ tags:
     
 
 这让我意识到，我对 Zustand 的理解是错的。
-
-![](assets/img_1.ico)
 
 ![](assets/img_1.png)
