@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blog";
 import { format } from "date-fns";
 import type { Metadata } from "next";
@@ -99,10 +98,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <article className="mx-auto mt-10 max-w-[732px] px-4 pb-12">
       <div className="flex justify-between items-center mb-3">
-        <Link href="/" className="text-sm text-neutral-400 flex items-center hover:text-neutral-900">
+        <a href="/" className="text-sm text-neutral-400 flex items-center hover:text-neutral-900">
           <ArrowLeft className="mr-0 size-[18px]" />
           Back
-        </Link>
+        </a>
       </div>
       {/* Title */}
       <h1 className="text-neutral-900 mb-3 text-[26px] font-bold">
@@ -117,13 +116,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               {post.tags.map((tag) => (
-                <Link
+                <a
                   key={`${post.slug}-${tag}`}
                   href={`/?tag=${encodeURIComponent(tag)}`}
                   className="text-xs text-neutral-500"
                 >
                   #{tag}
-                </Link>
+                </a>
               ))}
             </div>
           )}
@@ -153,14 +152,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {post.source && (
         <div className="mt-10 text-sm text-neutral-400">
           Source:{" "}
-          <Link
+          <a
             href={post.source}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-400 hover:underline"
           >
             {post.source}
-          </Link>
+          </a>
         </div>
       )}
       {/* 客户端组件：在客户端挂载后为图片添加预览功能 */}

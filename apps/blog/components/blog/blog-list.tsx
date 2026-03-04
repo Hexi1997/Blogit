@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { BlogMetadata } from "@/types/blog";
@@ -160,7 +159,7 @@ export function BlogList({ posts }: { posts: BlogMetadata[] }) {
               : { href: `/blog/${post.slug}` };
 
             return (
-              <Link
+              <a
                 key={post.slug}
                 {...linkProps}
                 className="block py-5 -mx-3 px-3 rounded-lg group hover:bg-gray-50 transition-colors"
@@ -191,7 +190,7 @@ export function BlogList({ posts }: { posts: BlogMetadata[] }) {
                     ))}
                   </div>
                 )}
-              </Link>
+              </a>
             );
           })
         )}
