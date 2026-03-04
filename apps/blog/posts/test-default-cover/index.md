@@ -19,5 +19,3 @@ tags:
     
 
 这让我意识到，我对 Zustand 的理解是错的。
-
-![](assets/img_1.jpg)
