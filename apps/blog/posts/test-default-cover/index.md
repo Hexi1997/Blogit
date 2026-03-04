@@ -3,11 +3,11 @@ title: 'Test default cover'
 date: '2026-03-02'
 ---
 
-这次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：
+**这次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：**
 
-> 为什么我可以在组件外面通过 `store.getState().setXXX()` 修改状态，而且组件里的值还能自动更新？
+> _为什么我可以在组件外面通过_ `_store.getState().setXXX()_` _修改状态，而且组件里的值还能自动更新？_
 
-一开始我一直以为 Zustand 是基于 React Context 实现的。既然是基于 Context，那它应该只能在组件树里用，离开组件就没法工作。但实际测试下来发现：
+一~开始我一直以为 Zustand 是基于 React Context 实现的。既然是基于 Context，那它应该只能在组件树里~用，离开组件就没法工作。但实际测试下来发现：
 
 -   在组件外调用 `.getState().setXXX()` 完全没问题
     
