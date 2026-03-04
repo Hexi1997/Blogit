@@ -7,7 +7,7 @@ date: '2026-03-02'
 
 > _为什么我可以在组件外面通过_ `store.getState().setXXX()` _修改状态，而且组件里的值还能自动更新？_
 
-~~一开始我一直以为 Zustand 是基于 React Context 实现的。既然是基于 Context，那它应该只~~能在组件树里用，离开组件就没法工作。但实际测试下来发现：
+一开始我一直以为 Zustand 是基于 React Context 实现的。既然是基于 Context，那它应该只能在组件树里用，离开组件就没法工作。但实际测试下来发现：
 
 * 在组件外调用 `.getState().setXXX()` 完全没问题
 
@@ -23,7 +23,7 @@ const a = 1;
 
 <br />
 
-![1.00](assets/img_1.webp "test")
+![1.00](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/test-default-cover/assets/img_1.webp "test")
 
 <br />
 
