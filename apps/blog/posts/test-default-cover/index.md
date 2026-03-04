@@ -17,7 +17,7 @@ date: '2026-03-02'
 
 这让我意识到，我对 Zustand 的理解是错的。
 
-```TypeScript
+```typescript
 const a = 1;
 ```
 
