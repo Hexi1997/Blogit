@@ -81,8 +81,16 @@ function installMarkdownTableRule(service: TurndownService) {
   })
 }
 
+function installStrikethroughRule(service: TurndownService) {
+  service.addRule('strikethrough', {
+    filter: ['del', 's'],
+    replacement: (content) => `~~${content}~~`,
+  })
+}
+
 const markdownTokenizer = defaultMarkdownParser.tokenizer
 markdownTokenizer.enable('table')
+markdownTokenizer.enable('strikethrough')
 
 function isIgnorableLeadingParagraph(doc: { childCount: number; firstChild: { type: { name: string }; childCount: number; child: (i: number) => { type: { name: string }; isText?: boolean; text?: string | null } } | null }) {
   const first = doc.firstChild
@@ -129,6 +137,7 @@ export default function ProsekitEditor(props: EditorProps) {
       headingStyle: 'atx',
     })
     service.use(gfm)
+    installStrikethroughRule(service)
     installMarkdownTableRule(service)
     return service
   }, [])
