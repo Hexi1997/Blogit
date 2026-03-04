@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { getBlog, saveBlog } from "@/lib/github";
 import type { BlogFrontmatter, PendingImage } from "@/types";
-import { TipTapEditor } from "@/components/editor/tiptap-editor";
 import { FrontmatterForm } from "@/components/editor/frontmatter-form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { BLOG_REPO_CONFIG } from "@/lib/config";
+import ProsekitEditor from "@/components/editor/examples/full/editor";
 
 export function BlogEditorPage() {
   const { slug: paramSlug } = useParams<{ slug: string }>();
@@ -154,7 +154,7 @@ export function BlogEditorPage() {
         onSlugChange={setSlug}
       />
 
-      <TipTapEditor
+      <ProsekitEditor
         content={content}
         onChange={handleContentChange}
         onImageAdd={handleImageAdd}

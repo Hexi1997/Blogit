@@ -158,6 +158,39 @@ function serializeFrontmatter(fm: BlogFrontmatter): string {
   return lines.join("\n");
 }
 
+function extractReferencedAssetPaths(markdown: string): Set<string> {
+  const referenced = new Set<string>();
+  const re = /(?:\.\/)?assets\/([^\s)"'`>\]]+)/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = re.exec(markdown)) !== null) {
+    referenced.add(`assets/${match[1]}`);
+  }
+
+  return referenced;
+}
+
+async function listBlogAssetFilePaths(token: string, slug: string): Promise<string[]> {
+  const octokit = createOctokit(token);
+  const basePath = `${BLOG_PATH}/${slug}/assets`;
+
+  try {
+    const { data } = await octokit.rest.repos.getContent({
+      owner: OWNER,
+      repo: REPO,
+      path: basePath,
+      ref: BRANCH,
+    });
+
+    if (!Array.isArray(data)) return [];
+    return data.filter((item) => item.type === "file").map((item) => item.path);
+  } catch (err) {
+    // Assets folder may not exist yet.
+    if ((err as { status?: number }).status === 404) return [];
+    throw err;
+  }
+}
+
 export async function listBlogs(token: string): Promise<PostItem[]> {
   const octokit = createOctokit(token);
 
@@ -254,6 +287,10 @@ export async function saveBlog(
   isNew: boolean
 ): Promise<void> {
   const octokit = createOctokit(token);
+  const referencedAssets = extractReferencedAssetPaths(markdownContent);
+  const usedPendingImages = images.filter((img) =>
+    referencedAssets.has(`assets/${img.filename}`)
+  );
 
   // 1. Get current HEAD ref
   const { data: refData } = await octokit.rest.git.getRef({
@@ -280,12 +317,12 @@ export async function saveBlog(
     encoding: "base64",
   });
 
-  // 4. Create blobs for images
+  // 4. Create blobs for referenced pending images only
   const treeItems: Array<{
     path: string;
     mode: "100644";
     type: "blob";
-    sha: string;
+    sha: string | null;
   }> = [
     {
       path: `${BLOG_PATH}/${slug}/index.md`,
@@ -295,7 +332,7 @@ export async function saveBlog(
     },
   ];
 
-  for (const img of images) {
+  for (const img of usedPendingImages) {
     const base64 = await fileToBase64(img.file);
     const { data: imgBlob } = await octokit.rest.git.createBlob({
       owner: OWNER,
@@ -309,6 +346,22 @@ export async function saveBlog(
       type: "blob",
       sha: imgBlob.sha,
     });
+  }
+
+  // 4.1 Delete orphaned assets that are no longer referenced in markdown
+  const existingAssetPaths = await listBlogAssetFilePaths(token, slug);
+  const keepAssetPaths = new Set(
+    Array.from(referencedAssets, (relativePath) => `${BLOG_PATH}/${slug}/${relativePath}`)
+  );
+  for (const path of existingAssetPaths) {
+    if (!keepAssetPaths.has(path)) {
+      treeItems.push({
+        path,
+        mode: "100644",
+        type: "blob",
+        sha: null,
+      });
+    }
   }
 
   // 5. Create new tree

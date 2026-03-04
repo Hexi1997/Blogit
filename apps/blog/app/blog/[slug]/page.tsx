@@ -140,6 +140,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             prose-pre:bg-[#f9f9f8]! prose-pre:font-geist-mono!
             [&_:not(pre)>code]:bg-[#ececec]! [&_:not(pre)>code]:font-geist-mono!
             [&_pre.shiki]:p-4 [&_pre.shiki]:rounded-lg [&_pre.shiki]:overflow-x-auto
+            [&_table]:border-collapse [&_table]:border [&_table]:border-neutral-300 dark:[&_table]:border-neutral-700
+            [&_th]:border [&_th]:border-neutral-300 dark:[&_th]:border-neutral-700 [&_th]:text-left
+            [&_td]:border [&_td]:border-neutral-300 dark:[&_td]:border-neutral-700 [&_td]:text-left
+            [&_tr:first-child>th]:bg-gray-100 dark:[&_tr:first-child>th]:bg-gray-800
+            [&_tr:first-child>td]:bg-gray-100 dark:[&_tr:first-child>td]:bg-gray-800
             [&_:not(pre)>code]:before:content-[''] [&_:not(pre)>code]:after:content-['']
             [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:rounded-[4px]"
         dangerouslySetInnerHTML={{ __html: post.content }}
