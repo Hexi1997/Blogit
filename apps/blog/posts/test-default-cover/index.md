@@ -1,6 +1,9 @@
 ---
 title: 'Test default cover'
 date: '2026-03-02'
+tags:
+  - 'ayouwai'
+  - 'pangbaobao'
 ---
 
 **这次对 Zustand 的理解升级，其实是从一个很简单的问题开始的：**

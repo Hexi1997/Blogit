@@ -1,12 +1,15 @@
 {
-  "generatedAt": "2026-03-05T05:43:05.145Z",
+  "generatedAt": "2026-03-05T05:46:14.259Z",
   "count": 8,
   "posts": [
     {
       "slug": "test-default-cover",
       "title": "Test default cover",
       "date": "2026-03-02",
-      "tags": []
+      "tags": [
+        "ayouwai",
+        "pangbaobao"
+      ]
     },
     {
       "slug": "cong-shadcn-ui-button-dao-ke-ding-zhi",
