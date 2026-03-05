@@ -131,3 +131,8 @@ export function Button(props: IButtonProps) {
 
 它适合作为 React + Tailwind 项目中的业务标准按钮组件。
 
+$$
+P \left( A=2 \, \middle| \, \dfrac{A^2}{B}>4 \right)
+$$
+
+
