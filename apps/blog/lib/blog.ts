@@ -11,6 +11,26 @@ import type { BlogPost, BlogMetadata } from "@/types/blog";
 
 const BLOG_DIRECTORY = path.join(process.cwd(), "posts");
 
+function escapeHtml(text: string): string {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function convertImageTitleToCaption(contentHtml: string): string {
+  return contentHtml.replace(
+    /<img([^>]*?)\s+title="([^"]+)"([^>]*?)>/gi,
+    (_match, before, title, after) => {
+      const caption = escapeHtml(title.trim());
+      const imgWithoutTitle = `<img${before}${after}>`;
+      return `<figure>${imgWithoutTitle}<figcaption>${caption}</figcaption></figure>`;
+    }
+  );
+}
+
 /**
  * 从 markdown 内容中提取第一张图片
  * @param content markdown 内容
@@ -276,6 +296,10 @@ export async function getBlogPostBySlug(
       .process(matterResult.content);
 
     let contentHtml = processedContent.toString();
+
+    // Convert markdown image titles into visible captions:
+    // ![alt](url "caption") -> <figure><img ... /><figcaption>caption</figcaption></figure>
+    contentHtml = convertImageTitleToCaption(contentHtml);
 
     // 将 Markdown 内容中的相对路径图片转换为绝对路径
     // 开发模式使用 API 路由，生产模式使用静态文件
