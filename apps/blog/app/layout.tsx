@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anta, Geist, Geist_Mono as GeistMono } from "next/font/google";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Providers from "./providers";

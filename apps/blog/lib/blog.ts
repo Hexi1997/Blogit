@@ -3,8 +3,10 @@ import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeExternalLinks from "rehype-external-links";
+import rehypeKatex from "rehype-katex";
 import rehypeShiki from "@shikijs/rehype";
 import rehypeStringify from "rehype-stringify";
 import type { BlogPost, BlogMetadata } from "@/types/blog";
@@ -277,7 +279,12 @@ export async function getBlogPostBySlug(
     // 使用 remark 将 markdown 转换为 HTML
     const processedContent = await remark()
       .use(remarkGfm) // 支持 GitHub Flavored Markdown
+      .use(remarkMath) // 支持 LaTeX 语法（$...$ / $$...$$）
       .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 rehype (HTML AST)
+      .use(rehypeKatex, {
+        throwOnError: false,
+        strict: false,
+      })
       .use(rehypeExternalLinks, {
         target: "_blank",
         rel: ["noopener", "noreferrer"],
