@@ -3,7 +3,7 @@ title: '时序攻击（Timing Attack）：从一条 Twitter 推文说起'
 date: '2025-06-10'
 ---
 
-![1.00](assets/img_3.webp)
+![1.00](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/shi-xu-gong-ji-timing-attack-cong-yi/assets/img_3.webp)
 
 <br />
 
