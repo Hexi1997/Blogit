@@ -14,7 +14,6 @@ interface BlogIndexPost {
   title: string;
   date: string;
   tags?: string[];
-  sortIndex?: number;
   source?: string;
   cover?: string;
 }
@@ -130,7 +129,6 @@ function parseFrontmatter(raw: string): { frontmatter: BlogFrontmatter; content:
       title: fm.title || "Untitled",
       date: fm.date || new Date().toISOString().slice(0, 10),
       cover: fm.cover,
-      sortIndex: fm.sortIndex ? parseInt(fm.sortIndex, 10) : undefined,
       source: fm.source,
       tags,
     },
@@ -162,7 +160,6 @@ function serializeFrontmatter(fm: BlogFrontmatter): string {
   lines.push(safeYamlTitle(fm.title));
   lines.push(`date: ${escapeYamlString(fm.date)}`);
   if (fm.cover) lines.push(`cover: ${escapeYamlString(fm.cover)}`);
-  if (fm.sortIndex !== undefined) lines.push(`sortIndex: ${fm.sortIndex}`);
   if (fm.source) lines.push(`source: ${escapeYamlString(fm.source)}`);
   if (fm.tags && fm.tags.length > 0) {
     lines.push("tags:");
@@ -209,9 +206,6 @@ async function listBlogAssetFilePaths(token: string, slug: string): Promise<stri
 
 function sortBlogIndexPosts(posts: BlogIndexPost[]): BlogIndexPost[] {
   return [...posts].sort((a, b) => {
-    const sortIndexDiff = (b.sortIndex ?? 0) - (a.sortIndex ?? 0);
-    if (sortIndexDiff !== 0) return sortIndexDiff;
-
     const dateDiff = Date.parse(b.date) - Date.parse(a.date);
     if (!Number.isNaN(dateDiff) && dateDiff !== 0) return dateDiff;
     return 0;
@@ -236,7 +230,6 @@ function normalizeBlogIndexPosts(indexFile: BlogIndexFile): BlogIndexPost[] {
       title: post.title,
       date: post.date,
       tags: Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [],
-      sortIndex: typeof post.sortIndex === "number" ? post.sortIndex : 0,
       source: typeof post.source === "string" ? post.source : undefined,
       cover: typeof post.cover === "string" ? post.cover : undefined,
     }));
@@ -259,7 +252,6 @@ function toBlogIndexPost(slug: string, frontmatter: BlogFrontmatter): BlogIndexP
     title: frontmatter.title,
     date: frontmatter.date,
     tags: frontmatter.tags || [],
-    sortIndex: frontmatter.sortIndex ?? 0,
     source: frontmatter.source,
     cover: frontmatter.cover,
   };
@@ -302,6 +294,29 @@ async function buildBlogIndexFromRepo(octokit: Octokit): Promise<BlogIndexPost[]
   }
 
   return sortBlogIndexPosts(posts);
+}
+
+async function getIndexPostsForMutation(octokit: Octokit): Promise<BlogIndexPost[]> {
+  try {
+    const { data: indexData } = await octokit.rest.repos.getContent({
+      owner: OWNER,
+      repo: REPO,
+      path: `${BLOG_PATH}/_index.json`,
+      ref: BRANCH,
+    });
+
+    if (!Array.isArray(indexData) && indexData.type === "file") {
+      const parsed = JSON.parse(decodeBase64UTF8(indexData.content)) as BlogIndexFile;
+      return sortBlogIndexPosts(normalizeBlogIndexPosts(parsed));
+    }
+  } catch (error) {
+    const status = (error as { status?: number }).status;
+    if (status !== 404) {
+      console.warn("Failed to parse posts _index.json, fallback to repo scan.", error);
+    }
+  }
+
+  return buildBlogIndexFromRepo(octokit);
 }
 
 function normalizeIndexPosts(indexFile: BlogIndexFile): PostItem[] {
@@ -507,7 +522,7 @@ export async function saveBlog(
   }
 
   // 4.2 Keep posts/_index.json in sync in the same commit
-  const indexPosts = await buildBlogIndexFromRepo(octokit);
+  const indexPosts = await getIndexPostsForMutation(octokit);
   const updatedIndexPosts = sortBlogIndexPosts([
     ...indexPosts.filter((post) => post.slug !== slug),
     toBlogIndexPost(slug, frontmatter),
@@ -613,7 +628,7 @@ export async function deleteBlog(token: string, slug: string): Promise<void> {
   }));
 
   // Rebuild and update posts/_index.json in the same commit as deletion.
-  const indexPosts = await buildBlogIndexFromRepo(octokit);
+  const indexPosts = await getIndexPostsForMutation(octokit);
   const updatedIndexPosts = sortBlogIndexPosts(
     indexPosts.filter((post) => post.slug !== slug)
   );

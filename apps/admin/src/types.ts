@@ -14,7 +14,6 @@ export interface BlogFrontmatter {
   title: string;
   date: string;
   cover?: string;
-  sortIndex?: number;
   source?: string;
   tags?: string[];
 }

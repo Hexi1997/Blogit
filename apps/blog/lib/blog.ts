@@ -221,21 +221,14 @@ export function getAllBlogPosts(): BlogMetadata[] {
         author: "WORLD3",
         description,
         cover,
-        sortIndex: matterResult.data.sortIndex ?? 0,
         source,
         tags,
       };
     })
     .filter((post) => post !== null) as BlogMetadata[];
 
-  // 先按 sortIndex 降序排序（值越大越靠前），然后按日期降序排序
+  // 按日期降序排序
   const sortedPosts = allPostsData.sort((a, b) => {
-    // 首先比较 sortIndex
-    const sortIndexDiff = (b.sortIndex ?? 0) - (a.sortIndex ?? 0);
-    if (sortIndexDiff !== 0) {
-      return sortIndexDiff;
-    }
-    // sortIndex 相同时，按日期降序排序
     if (a.date < b.date) {
       return 1;
     } else {
@@ -362,7 +355,6 @@ export async function getBlogPostBySlug(
       description,
       cover,
       content: contentHtml,
-      sortIndex: matterResult.data.sortIndex ?? 0,
       source,
       tags,
       pinned,

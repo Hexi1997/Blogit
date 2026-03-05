@@ -41,7 +41,6 @@ posts/
 - **title** (required): Article title
 - **date** (required): Publication date, format: YYYY-MM-DD
 - **cover** (optional): Cover image path, supports relative paths (e.g., `assets/cover.jpg`) or external URLs (e.g., `https://example.com/image.jpg`). If not set, the system will automatically extract the first image from the markdown content as the cover; if there are no images in the content, it will use the placeholder image `/default-cover.png`
-- **sortIndex** (optional): Sort weight, default is 0. Higher values appear first. Articles with the same sortIndex are sorted by date in descending order
 - **source** (optional): External article URL. When set, clicking the blog card in the list will navigate directly to this external URL (opens in a new tab) instead of the internal blog detail page. The source link will also be displayed at the bottom of the blog detail page. This is useful for linking to third-party content
 - **tags** (optional): Article tags. Supports YAML array format, e.g. `tags: ["nextjs", "react"]` or multiline list.
 
@@ -79,16 +78,6 @@ When users click this blog card in the list, they will be redirected to the exte
 
 ### Sorting Rules
 
-Article sorting follows these rules:
+Article sorting follows this rule:
 
-1. **First sort by sortIndex in descending order**: Higher sortIndex values appear first
-2. **Then sort by date in descending order**: When sortIndex is the same, newest articles appear first
-
-Example:
-
-- Article A: sortIndex = 10, date = "2025-12-01"
-- Article B: sortIndex = 5, date = "2025-12-15"
-- Article C: sortIndex = 5, date = "2025-12-10"
-- Article D: sortIndex = 0, date = "2025-12-20"
-
-Display order: A → B → C → D
+1. **Sort by date in descending order**: Newest articles appear first

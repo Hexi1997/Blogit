@@ -45,7 +45,6 @@ function loadPostIndexItem(slug) {
         ? data.date.trim()
         : new Date().toISOString().slice(0, 10),
     tags: normalizeTags(data.tags),
-    sortIndex: typeof data.sortIndex === 'number' ? data.sortIndex : 0,
     source: typeof data.source === 'string' ? data.source : undefined,
     cover: typeof data.cover === 'string' ? data.cover : undefined,
   };
@@ -61,11 +60,7 @@ function generatePostIndex() {
     .filter((entry) => entry.isDirectory())
     .map((entry) => loadPostIndexItem(entry.name))
     .filter(Boolean)
-    .sort((a, b) => {
-      const sortIndexDiff = (b.sortIndex || 0) - (a.sortIndex || 0);
-      if (sortIndexDiff !== 0) return sortIndexDiff;
-      return toDateValue(b.date) - toDateValue(a.date);
-    });
+    .sort((a, b) => toDateValue(b.date) - toDateValue(a.date));
 
   const result = {
     generatedAt: new Date().toISOString(),
