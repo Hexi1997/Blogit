@@ -1,16 +1,7 @@
 {
-  "generatedAt": "2026-03-05T06:07:15.932Z",
-  "count": 8,
+  "generatedAt": "2026-03-05T06:14:14.070Z",
+  "count": 7,
   "posts": [
-    {
-      "slug": "test-default-cover",
-      "title": "Test default cover",
-      "date": "2026-03-02",
-      "tags": [
-        "ayouwai",
-        "pangbaobao"
-      ]
-    },
     {
       "slug": "cong-shadcn-ui-button-dao-ke-ding-zhi",
       "title": "从 shadcn/ui Button 到可定制 loading 的业务按钮",
