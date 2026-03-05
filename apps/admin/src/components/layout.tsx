@@ -28,7 +28,6 @@ export function Layout() {
         <div className="mx-auto flex h-14 max-w-[766px] items-center justify-between px-4">
           <Link to="/" className="text-lg font-bold">
           <div className="flex items-center gap-1">
-            {/* TODO: change to your own logo */}
             <img src="/icons/logo-mark.svg" alt="Blog Admin" className="h-8" />
             <span className="text-lg bg-black text-white font-anta">BLOGIT</span>
           </div>
