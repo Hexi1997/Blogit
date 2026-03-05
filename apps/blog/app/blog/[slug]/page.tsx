@@ -136,6 +136,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         id={`blog-content-${post.slug}`}
         className="prose mt-6 max-w-none prose-headings:font-semibold
             prose-img:rounded-2xl prose-img:shadow-lg prose-img:w-full
+            prose-figcaption:text-center
             prose-pre:bg-[#f9f9f8]! prose-pre:font-geist-mono!
             [&_:not(pre)>code]:bg-[#ececec]! [&_:not(pre)>code]:font-geist-mono!
             [&_pre.shiki]:p-4 [&_pre.shiki]:rounded-lg [&_pre.shiki]:overflow-x-auto

@@ -7,7 +7,15 @@ import { FrontmatterForm } from "@/components/editor/frontmatter-form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { BLOG_REPO_CONFIG } from "@/lib/config";
-import ProsekitEditor from "@/components/editor/examples/full/editor";
+import MilkdownEditor from "@/components/editor/milkdown-editor";
+
+function normalizeFenceLanguageCase(markdown: string): string {
+  return markdown.replace(
+    /^([ \t]*)(`{3,}|~{3,})([ \t]*)([A-Za-z][\w-]*)([^\n\r]*)$/gm,
+    (_match, indent, fence, spacing, lang, tail) =>
+      `${indent}${fence}${spacing}${lang.toLowerCase()}${tail}`
+  );
+}
 
 export function BlogEditorPage() {
   const { slug: paramSlug } = useParams<{ slug: string }>();
@@ -86,6 +94,7 @@ export function BlogEditorPage() {
       for (const [displayUrl, relativePath] of urlMapRef.current.entries()) {
         finalContent = finalContent.replaceAll(displayUrl, relativePath);
       }
+      finalContent = normalizeFenceLanguageCase(finalContent);
 
       await saveBlog(token, slug, frontmatter, finalContent, pendingImages, isNew);
 
@@ -154,11 +163,13 @@ export function BlogEditorPage() {
         onSlugChange={setSlug}
       />
 
-      <ProsekitEditor
-        content={content}
-        onChange={handleContentChange}
-        onImageAdd={handleImageAdd}
-      />
+      <div className="relative left-1/2 w-[974px] max-w-[calc(100vw-2rem)] -translate-x-1/2">
+        <MilkdownEditor
+          content={content}
+          onChange={handleContentChange}
+          onImageAdd={handleImageAdd}
+        />
+      </div>
     </div>
   );
 }
