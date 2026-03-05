@@ -131,8 +131,3 @@ export function Button(props: IButtonProps) {
 
 它适合作为 React + Tailwind 项目中的业务标准按钮组件。
 
-| h1 | h2 | h3 |
-| :- | :- | :- |
-| te | 2  | 3  |
-
-
