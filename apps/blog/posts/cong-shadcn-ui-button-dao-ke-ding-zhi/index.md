@@ -3,17 +3,17 @@ title: '从 shadcn/ui Button 到可定制 loading 的业务按钮'
 date: '2026-02-28'
 ---
 
-![img_2.webp](assets/img_2.webp)在前端开发中，按钮是最常用的组件之一。shadcn/ui 提供了默认的 Button 组件，但在实际业务中，它存在一些不足：
+![img\_2.webp](assets/img_2.webp)在前端开发中，按钮是最常用的组件之一。shadcn/ui 提供了默认的 Button 组件，但在实际业务中，它存在一些不足：
 
-- 默认按钮没有 loading 状态
+* 默认按钮没有 loading 状态
 
-- 无法阻止重复点击
+* 无法阻止重复点击
 
-- loader 样式无法自定义，不适应不同主题
+* loader 样式无法自定义，不适应不同主题
 
 为了解决这些问题，我在 shadcn/ui Button 的基础上，封装了一个业务 Button 组件。
 
----
+***
 
 ## 组件设计
 
@@ -21,23 +21,23 @@ date: '2026-02-28'
 
 1. **增加 loading 状态**
 
-   - 当按钮正在处理请求时显示 loader
+   * 当按钮正在处理请求时显示 loader
 
-   - 自动禁用按钮，防止重复提交
+   * 自动禁用按钮，防止重复提交
 
 2. **支持 loader 样式自定义**
 
-   - 通过 `loadingClassName` 可以修改 loader 样式，例如深色模式下反色
+   * 通过 `loadingClassName` 可以修改 loader 样式，例如深色模式下反色
 
 3. **继承原生 Button 属性**
 
-   - 保留所有原生属性，如 `type`, `onClick`, `disabled`
+   * 保留所有原生属性，如 `type`, `onClick`, `disabled`
 
 4. **安全点击逻辑**
 
-   - 当按钮处于 loading 或 disabled 时，阻止点击事件
+   * 当按钮处于 loading 或 disabled 时，阻止点击事件
 
----
+***
 
 ## 核心代码
 
@@ -94,7 +94,7 @@ export function Button(props: IButtonProps) {
 }
 ```
 
----
+***
 
 ## 使用示例
 
@@ -109,13 +109,13 @@ export function Button(props: IButtonProps) {
 </Button>
 ```
 
-- `loading` 为 true 时显示 loader
+* `loading` 为 true 时显示 loader
 
-- 按钮禁用，防止重复点击
+* 按钮禁用，防止重复点击
 
-- loader 样式可通过 `loadingClassName` 自定义
+* loader 样式可通过 `loadingClassName` 自定义
 
----
+***
 
 ## 总结
 
@@ -128,3 +128,9 @@ export function Button(props: IButtonProps) {
 3. 自动禁用点击，避免重复提交
 
 它适合作为 React + Tailwind 项目中的业务标准按钮组件。
+
+| h1 | h2 | h3 |
+| :- | :- | :- |
+| te | 2  | 3  |
+
+
