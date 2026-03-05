@@ -3,7 +3,7 @@ title: '从 shadcn/ui Button 到可定制 loading 的业务按钮'
 date: '2026-02-28'
 ---
 
-![img\_2.webp](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/cong-shadcn-ui-button-dao-ke-ding-zhi/assets/img_2.webp)
+![1.00](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/cong-shadcn-ui-button-dao-ke-ding-zhi/assets/img_2.webp)
 
 在前端开发中，按钮是最常用的组件之一。shadcn/ui 提供了默认的 Button 组件，但在实际业务中，它存在一些不足：
 
@@ -43,7 +43,7 @@ date: '2026-02-28'
 
 ## 核心代码
 
-```typescript
+```tsx
 import React, { ReactNode, useMemo } from 'react';
 import { cn } from '@/utils/cn';
 
@@ -100,7 +100,7 @@ export function Button(props: IButtonProps) {
 
 ## 使用示例
 
-```typescript
+```tsx
 <Button
   loading={isSubmitting}
   loadingClassName="invert"
