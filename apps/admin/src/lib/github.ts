@@ -9,6 +9,22 @@ interface BlogPost {
   sha?: string;
 }
 
+interface BlogIndexPost {
+  slug: string;
+  title: string;
+  date: string;
+  tags?: string[];
+  sortIndex?: number;
+  source?: string;
+  cover?: string;
+}
+
+interface BlogIndexFile {
+  generatedAt?: string;
+  count?: number;
+  posts?: BlogIndexPost[];
+}
+
 function decodeBase64UTF8(base64: string): string {
   const binary = atob(base64);
   const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
@@ -191,8 +207,134 @@ async function listBlogAssetFilePaths(token: string, slug: string): Promise<stri
   }
 }
 
+function sortBlogIndexPosts(posts: BlogIndexPost[]): BlogIndexPost[] {
+  return [...posts].sort((a, b) => {
+    const sortIndexDiff = (b.sortIndex ?? 0) - (a.sortIndex ?? 0);
+    if (sortIndexDiff !== 0) return sortIndexDiff;
+
+    const dateDiff = Date.parse(b.date) - Date.parse(a.date);
+    if (!Number.isNaN(dateDiff) && dateDiff !== 0) return dateDiff;
+    return 0;
+  });
+}
+
+function normalizeBlogIndexPosts(indexFile: BlogIndexFile): BlogIndexPost[] {
+  if (!Array.isArray(indexFile.posts)) return [];
+
+  return indexFile.posts
+    .filter(
+      (post): post is BlogIndexPost =>
+        Boolean(
+          post &&
+          typeof post.slug === "string" &&
+          typeof post.title === "string" &&
+          typeof post.date === "string"
+        )
+    )
+    .map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      date: post.date,
+      tags: Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [],
+      sortIndex: typeof post.sortIndex === "number" ? post.sortIndex : 0,
+      source: typeof post.source === "string" ? post.source : undefined,
+      cover: typeof post.cover === "string" ? post.cover : undefined,
+    }));
+}
+
+function serializeBlogIndex(posts: BlogIndexPost[]): string {
+  const sortedPosts = sortBlogIndexPosts(posts);
+  const payload: BlogIndexFile = {
+    generatedAt: new Date().toISOString(),
+    count: sortedPosts.length,
+    posts: sortedPosts,
+  };
+
+  return `${JSON.stringify(payload, null, 2)}\n`;
+}
+
+function toBlogIndexPost(slug: string, frontmatter: BlogFrontmatter): BlogIndexPost {
+  return {
+    slug,
+    title: frontmatter.title,
+    date: frontmatter.date,
+    tags: frontmatter.tags || [],
+    sortIndex: frontmatter.sortIndex ?? 0,
+    source: frontmatter.source,
+    cover: frontmatter.cover,
+  };
+}
+
+async function buildBlogIndexFromRepo(octokit: Octokit): Promise<BlogIndexPost[]> {
+  const { data } = await octokit.rest.repos.getContent({
+    owner: OWNER,
+    repo: REPO,
+    path: BLOG_PATH,
+    ref: BRANCH,
+  });
+
+  if (!Array.isArray(data)) return [];
+
+  const dirs = data.filter((item) => item.type === "dir");
+
+  const results = await Promise.allSettled(
+    dirs.map(async (dir) => {
+      const { data: fileData } = await octokit.rest.repos.getContent({
+        owner: OWNER,
+        repo: REPO,
+        path: `${BLOG_PATH}/${dir.name}/index.md`,
+        ref: BRANCH,
+      });
+
+      if (Array.isArray(fileData) || fileData.type !== "file") return null;
+
+      const raw = decodeBase64UTF8(fileData.content);
+      const { frontmatter } = parseFrontmatter(raw);
+      return toBlogIndexPost(dir.name, frontmatter);
+    })
+  );
+
+  const posts: BlogIndexPost[] = [];
+  for (const result of results) {
+    if (result.status === "fulfilled" && result.value) {
+      posts.push(result.value);
+    }
+  }
+
+  return sortBlogIndexPosts(posts);
+}
+
+function normalizeIndexPosts(indexFile: BlogIndexFile): PostItem[] {
+  return normalizeBlogIndexPosts(indexFile).map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      date: post.date,
+      tags: Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [],
+    }));
+}
+
 export async function listBlogs(token: string): Promise<PostItem[]> {
   const octokit = createOctokit(token);
+
+  try {
+    const { data: indexData } = await octokit.rest.repos.getContent({
+      owner: OWNER,
+      repo: REPO,
+      path: `${BLOG_PATH}/_index.json`,
+      ref: BRANCH,
+    });
+
+    if (!Array.isArray(indexData) && indexData.type === "file") {
+      const parsed = JSON.parse(decodeBase64UTF8(indexData.content)) as BlogIndexFile;
+      return normalizeIndexPosts(parsed);
+    }
+  } catch (error) {
+    // Fallback to legacy mode when index is missing or malformed.
+    const status = (error as { status?: number }).status;
+    if (status !== 404) {
+      console.warn("Failed to read posts _index.json, fallback to per-post fetch.", error);
+    }
+  }
 
   const { data } = await octokit.rest.repos.getContent({
     owner: OWNER,
@@ -364,6 +506,25 @@ export async function saveBlog(
     }
   }
 
+  // 4.2 Keep posts/_index.json in sync in the same commit
+  const indexPosts = await buildBlogIndexFromRepo(octokit);
+  const updatedIndexPosts = sortBlogIndexPosts([
+    ...indexPosts.filter((post) => post.slug !== slug),
+    toBlogIndexPost(slug, frontmatter),
+  ]);
+  const { data: indexBlob } = await octokit.rest.git.createBlob({
+    owner: OWNER,
+    repo: REPO,
+    content: encodeUTF8Base64(serializeBlogIndex(updatedIndexPosts)),
+    encoding: "base64",
+  });
+  treeItems.push({
+    path: `${BLOG_PATH}/_index.json`,
+    mode: "100644",
+    type: "blob",
+    sha: indexBlob.sha,
+  });
+
   // 5. Create new tree
   const { data: newTree } = await octokit.rest.git.createTree({
     owner: OWNER,
@@ -450,6 +611,24 @@ export async function deleteBlog(token: string, slug: string): Promise<void> {
     type: "blob" as const,
     sha: null as unknown as string,
   }));
+
+  // Rebuild and update posts/_index.json in the same commit as deletion.
+  const indexPosts = await buildBlogIndexFromRepo(octokit);
+  const updatedIndexPosts = sortBlogIndexPosts(
+    indexPosts.filter((post) => post.slug !== slug)
+  );
+  const { data: indexBlob } = await octokit.rest.git.createBlob({
+    owner: OWNER,
+    repo: REPO,
+    content: encodeUTF8Base64(serializeBlogIndex(updatedIndexPosts)),
+    encoding: "base64",
+  });
+  treeItems.push({
+    path: `${BLOG_PATH}/_index.json`,
+    mode: "100644" as const,
+    type: "blob" as const,
+    sha: indexBlob.sha,
+  });
 
   const { data: newTree } = await octokit.rest.git.createTree({
     owner: OWNER,
