@@ -21,10 +21,6 @@ date: '2026-03-02'
 const a = 1;
 ```
 
-<br />
-
 ![1.00](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/test-default-cover/assets/img_1.webp "test")
-
-<br />
 
 
