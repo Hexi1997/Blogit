@@ -3,7 +3,9 @@ title: '时序攻击（Timing Attack）：从一条 Twitter 推文说起'
 date: '2025-06-10'
 ---
 
-![img\_3.webp](assets/img_3.webp)
+![1.00](assets/img_3.webp)
+
+<br />
 
 在 X（Twitter）刷到一条 [推文](https://x.com/sebastienlorber/status/1932367017065025675)，作者提出以下的代码存在 **timing attack 漏洞**
 
