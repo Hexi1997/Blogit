@@ -23,7 +23,7 @@ const a = 1;
 
 ![1.00](https://raw.githubusercontent.com/Hexi1997/Blogit/main/apps/blog/posts/test-default-cover/assets/img_1.webp "test")
 
-```
+```javascript
 const a = 1;
 ```
 
