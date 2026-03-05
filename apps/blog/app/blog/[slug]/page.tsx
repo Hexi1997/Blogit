@@ -144,6 +144,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             [&_table]:border-collapse [&_table]:border [&_table]:border-neutral-300 dark:[&_table]:border-neutral-700
             [&_th]:border [&_th]:border-neutral-300 dark:[&_th]:border-neutral-700 [&_th]:text-left [&_th]:px-3
             [&_td]:border [&_td]:border-neutral-300 dark:[&_td]:border-neutral-700 [&_td]:text-left [&_td]:px-3
+            [&_thead_th]:pt-2!
             [&_thead>tr:first-child>th]:bg-gray-100 dark:[&_thead>tr:first-child>th]:bg-gray-800
             [&_table:not(:has(thead))>tbody>tr:first-child>td]:bg-gray-100 dark:[&_table:not(:has(thead))>tbody>tr:first-child>td]:bg-gray-800
             [&_:not(pre)>code]:before:content-[''] [&_:not(pre)>code]:after:content-['']

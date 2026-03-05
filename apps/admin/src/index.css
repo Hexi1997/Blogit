@@ -236,3 +236,9 @@
   background: #ffffff;
   border-radius: 9999px;
 }
+
+.blogit-milkdown-editor .milkdown-table-block [data-role='col-drag-handle'] .button-group > button:nth-child(1),
+.blogit-milkdown-editor .milkdown-table-block [data-role='col-drag-handle'] .button-group > button:nth-child(2),
+.blogit-milkdown-editor .milkdown-table-block [data-role='col-drag-handle'] .button-group > button:nth-child(3) {
+  display: none !important;
+}
