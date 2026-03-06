@@ -3,9 +3,9 @@ import { join } from "path";
 
 const nextConfig: NextConfig = {
   images: {
-    // 开发环境禁用图片优化以避免网络问题
+    // Disable image optimization in development to avoid network issues
     unoptimized: process.env.NODE_ENV === "development",
-    // 允许所有外部图片源
+    // Allow all remote image sources
     remotePatterns: [
       {
         protocol: "https",
@@ -18,14 +18,9 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // 生产环境优化
+  // Production optimizations
   compress: true,
 
-  // 实验性功能（可选）
-  experimental: {
-    // optimizePackageImports: ['date-fns'],
-    turbopackUseSystemTlsCerts: true,
-  },
   turbopack: {
     root: join(__dirname, "../..")
   }

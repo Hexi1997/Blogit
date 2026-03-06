@@ -4,10 +4,10 @@ import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
 
-  // 获取所有博客文章
+  // Load all blog posts
   const posts = getAllBlogPosts();
 
-  // 博客文章的 sitemap 条目
+  // Sitemap entries for blog posts
   const blogUrls = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // 静态页面的 sitemap 条目
+  // Sitemap entries for static pages
   const staticUrls = [
     {
       url: baseUrl,

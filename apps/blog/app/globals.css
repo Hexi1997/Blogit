@@ -52,11 +52,11 @@
 body {
   font-family: var(--font-geist), system-ui, sans-serif;
   color: white;
-  overscroll-behavior-y: none; /* 禁用垂直方向的弹性滚动 */
+  overscroll-behavior-y: none; /* Disable vertical rubber-band scrolling */
 }
 
 html {
-  overscroll-behavior-y: none; /* 禁用HTML元素的弹性滚动 */
+  overscroll-behavior-y: none; /* Disable rubber-band scrolling on html */
 }
 
 @utility font-geist {

@@ -17,7 +17,7 @@ export async function GET() {
 
         const coverIsAbsolute = post.cover.startsWith("http://") || post.cover.startsWith("https://");
 
-        // 强制使用生产静态路径（/blog-assets），避免 /api/blog-assets
+        // Force production static path (/blog-assets) to avoid /api/blog-assets
         const normalizedPath = post.cover.replace("/api/blog-assets", "/blog-assets");
 
         const normalizedCover = coverIsAbsolute
@@ -31,7 +31,7 @@ export async function GET() {
       })
     );
 
-    // 过滤掉 null（理论上不会出现）并按日期降序
+    // Filter out null values (should not happen in practice) and sort by date desc
     const filtered = posts
       .filter((p): p is NonNullable<typeof p> => Boolean(p))
       .sort((a, b) => (a.date < b.date ? 1 : -1));

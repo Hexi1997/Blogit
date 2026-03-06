@@ -7,8 +7,8 @@ interface BlogImageSkeletonProps {
 }
 
 /**
- * 客户端组件：为博客内容中的图片添加 skeleton 加载效果
- * 在图片加载期间显示骨架屏，提升用户体验
+ * Client component: add skeleton loading effect for images inside blog content
+ * Displays placeholders while images load to improve perceived performance
  */
 export function BlogImageSkeleton({ containerId }: BlogImageSkeletonProps) {
   useEffect(() => {
@@ -22,7 +22,7 @@ export function BlogImageSkeleton({ containerId }: BlogImageSkeletonProps) {
         return;
       }
 
-      // 查找所有博客内容中的图片
+      // Find all images inside blog content
       const images = container.querySelectorAll('img') as NodeListOf<HTMLImageElement>;
 
       if (images.length === 0) {
@@ -31,63 +31,63 @@ export function BlogImageSkeleton({ containerId }: BlogImageSkeletonProps) {
       }
 
       images.forEach((img) => {
-        // 如果已经处理过，跳过
+        // Skip if this image is already processed
         if (img.getAttribute('data-skeleton-processed')) {
           return;
         }
 
         img.setAttribute('data-skeleton-processed', 'true');
 
-        // 创建 skeleton 容器
+        // Create wrapper for skeleton + image
         const wrapper = document.createElement('div');
         wrapper.className = 'relative';
         wrapper.style.width = '100%';
         wrapper.style.minHeight = '370px';
         wrapper.style.marginBottom = '32px';
 
-        // 创建 skeleton 元素 - 使用 animate-pulse 和 bg-opacity
+        // Create skeleton layer (animate-pulse + translucent background)
         const skeleton = document.createElement('div');
         skeleton.className = 'absolute inset-0 bg-[#171717] bg-opacity-20 animate-pulse rounded-2xl';
         skeleton.setAttribute('data-image-skeleton', 'true');
 
-        // 在原图片位置插入包装器
+        // Insert wrapper at the original image position
         img.parentNode?.insertBefore(wrapper, img);
-        // 将图片和 skeleton 都放入包装器
+        // Put both skeleton and image into wrapper
         wrapper.appendChild(skeleton);
         wrapper.appendChild(img);
 
-        // 设置图片初始状态为不可见
+        // Start with image hidden
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.3s ease-in-out';
 
-        // 保存包装器引用
+        // Keep wrapper reference for cleanup
         loadingWrappers.set(img, wrapper);
 
-        // 检查图片是否已经加载完成（从缓存加载的情况）
+        // Handle case where image is already loaded from cache
         if (img.complete && img.naturalHeight !== 0) {
-          // 图片已加载，立即显示
+          // Image is loaded, show immediately
           img.style.opacity = '1';
           skeleton.remove();
-          // 清除最小高度，让图片自适应实际高度
+          // Reset minHeight so wrapper follows actual image height
           wrapper.style.minHeight = '';
         } else {
-          // 监听图片加载完成事件
+          // Listen for load completion
           const handleLoad = () => {
-            // 淡入图片
+            // Fade in image
             img.style.opacity = '1';
-            // 延迟移除 skeleton，配合淡入动画
+            // Remove skeleton after fade animation
             setTimeout(() => {
               skeleton.remove();
-              // 清除最小高度，让图片自适应实际高度
+              // Reset minHeight so wrapper follows actual image height
               wrapper.style.minHeight = '';
             }, 300);
           };
 
           const handleError = () => {
-            // 加载失败时也移除 skeleton
+            // Remove skeleton even on load error
             skeleton.remove();
             img.style.opacity = '1';
-            // 清除最小高度
+            // Reset minHeight
             wrapper.style.minHeight = '';
           };
 
@@ -97,22 +97,22 @@ export function BlogImageSkeleton({ containerId }: BlogImageSkeletonProps) {
       });
     };
 
-    // 立即尝试初始化
+    // Initialize immediately
     initImageSkeletons();
 
-    // 清理函数
+    // Cleanup
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
 
-      // 清理所有添加的元素和样式
+      // Clean up all injected elements and styles
       loadingWrappers.forEach((wrapper, img) => {
         const skeleton = wrapper.querySelector('[data-image-skeleton]');
         if (skeleton) {
           skeleton.remove();
         }
-        // 恢复图片的原始状态
+        // Restore original image state
         if (img.parentNode === wrapper && wrapper.parentNode) {
           wrapper.parentNode.insertBefore(img, wrapper);
           wrapper.remove();
@@ -127,5 +127,4 @@ export function BlogImageSkeleton({ containerId }: BlogImageSkeletonProps) {
 
   return null;
 }
-
 

@@ -7,7 +7,7 @@ import type { BlogFrontmatter } from "@/types";
 function generateSlug(title: string): string {
   const cleaned = title.replace(/[''\u2019]s\b/gi, "");
   const full = slugify(cleaned, { lowercase: true, separator: "-" })
-    .replace(/\./g, "-"); // slug must not contain dots (e.g. from "17.8万")
+    .replace(/\./g, "-"); // slug must not contain dots
   return full.split("-").slice(0, 8).join("-");
 }
 

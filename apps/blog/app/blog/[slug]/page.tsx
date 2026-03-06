@@ -15,7 +15,7 @@ interface BlogPostPageProps {
   }>;
 }
 
-// 生成静态参数（SSG）
+// Generate static params (SSG)
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs();
   return slugs.map((slug) => ({
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   }));
 }
 
-// 生成动态 Metadata（SEO）
+// Generate dynamic metadata (SEO)
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
@@ -36,23 +36,23 @@ export async function generateMetadata({
     };
   }
 
-  // 获取基础 URL
+  // Get base URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
 
-  // 确保图片 URL 是完整的绝对 URL
-  // 如果已经是完整的 URL（http/https），直接使用
-  // 如果是相对路径，需要转换为绝对 URL
+  // Ensure image URL is absolute
+  // If already absolute (http/https), keep it
+  // If relative, convert to absolute URL
   let imageUrl = post.cover;
   if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
-    // 确保路径以 / 开头
+    // Ensure leading slash
     if (!imageUrl.startsWith("/")) {
       imageUrl = `/${imageUrl}`;
     }
-    // 构建完整的绝对 URL
+    // Build full absolute URL
     imageUrl = `${baseUrl}${imageUrl}`;
   }
 
-  // 在生产环境中，确保不使用开发环境的 API 路由
+  // In production, ensure dev API route is not used
   if (process.env.NODE_ENV === "production") {
     imageUrl = imageUrl.replace("/api/blog-assets", "/blog-assets");
   }
@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // 构建完整的文章 URL
+  // Build full post URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
   const postUrl = `${baseUrl}/blog/${slug}`;
 
@@ -165,14 +165,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </a>
         </div>
       )}
-      {/* 客户端组件：在客户端挂载后为图片添加预览功能 */}
+      {/* Client-only: add image preview interactions after hydration */}
       <BlogPhotoViewEnhancer containerId={`blog-content-${post.slug}`} />
-      {/* 客户端组件：为图片添加 skeleton 加载效果 */}
+      {/* Client-only: add skeleton loading for images */}
       <BlogImageSkeleton containerId={`blog-content-${post.slug}`} />
-      {/* 客户端组件：为代码块添加复制按钮 */}
+      {/* Client-only: add copy buttons for code blocks */}
       <BlogCodeCopyEnhancer containerId={`blog-content-${post.slug}`} />
 
-      {/* 评论区 */}
+      {/* Comment section */}
       <GiscusComments />
     </article>
   );

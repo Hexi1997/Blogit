@@ -3,12 +3,12 @@ export interface BlogPost {
   title: string;
   date: string;
   author: string;
-  description: string; // 自动从内容提取，如果 frontmatter 中未指定
+  description: string; // Auto-extracted from content when not specified in frontmatter
   cover: string;
   content: string;
   source?: string;
   tags?: string[];
-  pinned?: boolean; // 是否为置顶文章（排序前四名）
+  pinned?: boolean; // Whether the post is pinned (top 4 after sorting)
 }
 
 export interface BlogMetadata {
@@ -16,9 +16,9 @@ export interface BlogMetadata {
   title: string;
   date: string;
   author: string;
-  description: string; // 自动从内容提取，如果 frontmatter 中未指定
+  description: string; // Auto-extracted from content when not specified in frontmatter
   cover: string;
   source?: string;
   tags?: string[];
-  pinned?: boolean; // 是否为置顶文章（排序前四名）
+  pinned?: boolean; // Whether the post is pinned (top 4 after sorting)
 }
