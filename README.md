@@ -29,7 +29,7 @@ Change it to the owner and repo name of the repository created in step 1.
 
 ### 3. Generate a GitHub PAT and initialize local Admin variables
 
-Create a [GitHub Personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) with repository write permissions, then copy [.dev.vars.example](apps/admin/.dev.vars.example) to `.dev.vars`:
+Create a [GitHub fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) with `Contents: Read and write` permission for the current repository only, then copy [.dev.vars.example](apps/admin/.dev.vars.example) to `.dev.vars`:
 
 Then update values in `.dev.vars`:
   - `ADMIN_PAT=<your_github_pat>`

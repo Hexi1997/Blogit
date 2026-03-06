@@ -29,7 +29,7 @@
 
 ### 3. 生成 GitHub PAT 并初始化 Admin 本地变量
 
-生成一个有仓库写权限的 [GitHub Personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)，复制 [.dev.vars.example](apps/admin/.dev.vars.example) 到 `.dev.vars`：
+生成一个有只有当前仓库 `Contents Read And Write` 权限的 [GitHub fine-grained personal access tokens ](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)，复制 [.dev.vars.example](apps/admin/.dev.vars.example) 到 `.dev.vars`：
 
 然后在 `.dev.vars` 中更新：
   - `ADMIN_PAT=<your_github_pat>`

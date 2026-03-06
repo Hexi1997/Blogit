@@ -19,7 +19,6 @@ interface BlogIndexPost {
 }
 
 interface BlogIndexFile {
-  generatedAt?: string;
   count?: number;
   posts?: BlogIndexPost[];
 }
@@ -238,7 +237,6 @@ function normalizeBlogIndexPosts(indexFile: BlogIndexFile): BlogIndexPost[] {
 function serializeBlogIndex(posts: BlogIndexPost[]): string {
   const sortedPosts = sortBlogIndexPosts(posts);
   const payload: BlogIndexFile = {
-    generatedAt: new Date().toISOString(),
     count: sortedPosts.length,
     posts: sortedPosts,
   };
