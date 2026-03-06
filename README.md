@@ -11,7 +11,7 @@
 - **SEO optimized by default**: powered by SSG static generation, with built-in `metadata`, `sitemap.xml`, and `robots.txt` for search-engine friendliness.
 - **Visual admin panel**: includes an admin system with Markdown block-level editing, so non-technical users can also write and manage content easily.
 
-## I. Quick Start
+## Quick Start
 
 ### 1. Use this template
 
@@ -54,7 +54,7 @@ In your repository at `Settings -> Secrets and variables -> Actions -> Repositor
   - After GitHub workflows finish, you can find deployment URLs for `blogit-admin` and `blogit-blog` under `Cloudflare Workers and Pages`.
   - Get the deployment URL of `blogit-blog` and update `NEXT_PUBLIC_SITE_URL` in [.env](apps/blog/.env).
 
-## II. Project Overview
+## Project Overview
 
 ### 1. Introduction
 Blogit is a pnpm monorepo Markdown blog system with two applications:
@@ -78,7 +78,7 @@ Blogit is a pnpm monorepo Markdown blog system with two applications:
   - Post list / create / edit / delete
   - Atomic commit (content + images + `_index.json` in one commit)
 
-## III. Directory Structure
+## Directory Structure
 
 ```text
 ├── apps/
@@ -92,13 +92,13 @@ Blogit is a pnpm monorepo Markdown blog system with two applications:
 └── pnpm-workspace.yaml
 ```
 
-## IV. Install Dependencies
+## Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-## V. Local Development
+## Local Development
 
 ### 1. Start both apps
 
@@ -118,7 +118,7 @@ Common local URLs:
 - Blog: `http://localhost:3000`
 - Admin: printed by Wrangler Pages dev (`http://localhost:8788`)
 
-## VI. Blog Content Management
+## Blog Content Management
 
 ### 1. Directory Structure
 
@@ -159,6 +159,6 @@ source: "https://example.com/original-link" # optional external link post
 - `pnpm --filter blog run generate-index`: rebuild `posts/_index.json` (automatically handled by [workflow](.github/workflows/sync-post-index.yml), no manual local run needed)
 - `pnpm --filter blog run sync-assets`: sync `posts/*/assets` to `public/blog-assets` (automatically handled by [workflow](.github/workflows/deploy-blog.yml), no manual local run needed)
 
-## VII. License
+## License
 
 MIT License, see [LICENSE](./LICENSE).

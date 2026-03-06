@@ -11,7 +11,7 @@
 - **SEO optimized by default**：基于 SSG 静态生成，并内置 `metadata`、`sitemap.xml` 与 `robots.txt`，默认面向搜索引擎友好。
 - **Visual admin panel**：提供博客后台管理系统，支持 Markdown Block 级编辑，非技术用户也能轻松写作和管理内容。
 
-## 一、Quick Start
+## 快速开始
 
 ### 1. Use this template
 
@@ -54,7 +54,7 @@
   - Github 流水线跑完以后可以在 `Cloudflare Workers and Pages` 看到 `blogit-admin` 和 `blogit-blog` 两个项目的部署地址
   - 获取 `blogit-blog` 项目的部署地址并更新到 [.env](apps/blog/.env) 的 `NEXT_PUBLIC_SITE_URL`
 
-## 二、项目介绍
+## 项目介绍
 
 ### 1. 简介
 Blogit 是一个基于 pnpm monorepo 的 Markdown 博客系统，包含两个应用：
@@ -78,7 +78,7 @@ Blogit 是一个基于 pnpm monorepo 的 Markdown 博客系统，包含两个应
   - 文章列表 / 新建 / 编辑 / 删除
   - 原子化提交（正文 + 图片 + `_index.json` 同一次 commit）
 
-## 三、目录结构
+## 目录结构
 
 ```text
 ├── apps/
@@ -92,13 +92,13 @@ Blogit 是一个基于 pnpm monorepo 的 Markdown 博客系统，包含两个应
 └── pnpm-workspace.yaml
 ```
 
-## 四、安装依赖
+## 安装依赖
 
 ```bash
 pnpm install
 ```
 
-## 五、本地开发
+## 本地开发
 
 ### 1. 同时启动两个应用
 
@@ -118,7 +118,7 @@ pnpm dev:admin
 - Blog：`http://localhost:3000`
 - Admin：由 Wrangler Pages dev 输出（`http://localhost:8788`）
 
-## 六、博客内容管理
+## 博客内容管理
 
 ### 1. 目录结构
 
@@ -160,6 +160,6 @@ source: "https://example.com/original-link" # 可选，外链文章
 - `pnpm --filter blog run generate-index`：重建 `posts/_index.json`([流水线](.github/workflows/sync-post-index.yml)自动执行，无需本地手动执行）
 - `pnpm --filter blog run sync-assets`：同步 `posts/*/assets` 到 `public/blog-assets`([流水线](.github/workflows/deploy-blog.yml)自动执行，无需本地手动执行）
 
-## 七、许可证
+## 许可证
 
 MIT License，见 [LICENSE](./LICENSE)。
