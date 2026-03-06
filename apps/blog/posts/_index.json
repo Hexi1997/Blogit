@@ -3,6 +3,17 @@
   "count": 1,
   "posts": [
     {
+      "slug": "markdown-syntax-showcase",
+      "title": "Markdown Syntax Showcase",
+      "date": "2026-03-06",
+      "tags": [
+        "Markdown",
+        "Demo",
+        "Blogit"
+      ],
+      "cover": "assets/cover.svg"
+    },
+    {
       "slug": "the-story-behind-blogit-why-i-built-a",
       "title": "The Story Behind Blogit: Why I Built a Git-Powered, Local-First Blogging System",
       "date": "2026-03-06",
