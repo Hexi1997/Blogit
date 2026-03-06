@@ -11,6 +11,12 @@
 - **SEO optimized by default**：基于 SSG 静态生成，并内置 `metadata`、`sitemap.xml` 与 `robots.txt`，默认面向搜索引擎友好。
 - **Visual admin panel**：提供博客后台管理系统，支持 Markdown Block 级编辑，非技术用户也能轻松写作和管理内容。
 
+## 预览地址
+
+- Admin 预览地址：[https://blogit-admin.pages.dev](https://blogit-admin.pages.dev)
+- Admin 密码：`blogit123456`
+- Blog 预览地址：[https://blogit-blog.2437951611.workers.dev](https://blogit-blog.2437951611.workers.dev)
+
 ## 快速开始
 
 ### 1. Use this template

@@ -11,6 +11,12 @@
 - **SEO optimized by default**: powered by SSG static generation, with built-in `metadata`, `sitemap.xml`, and `robots.txt` for search-engine friendliness.
 - **Visual admin panel**: includes an admin system with Markdown block-level editing, so non-technical users can also write and manage content easily.
 
+## Preview
+
+- Admin preview: [https://blogit-admin.pages.dev](https://blogit-admin.pages.dev)
+- Admin password: `blogit123456`
+- Blog preview: [https://blogit-blog.2437951611.workers.dev](https://blogit-blog.2437951611.workers.dev)
+
 ## Quick Start
 
 ### 1. Use this template
