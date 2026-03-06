@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
-import { listBlogs, deleteBlog } from "@/lib/github";
+import { listBlogs, deleteBlog, setBlogPinned } from "@/lib/github";
 import type { PostItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 
+function sortPosts(posts: PostItem[]): PostItem[] {
+  return [...posts].sort((a, b) => {
+    if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+      return a.pinned ? -1 : 1;
+    }
+    return a.date < b.date ? 1 : -1;
+  });
+}
+
 export function BlogListPage() {
   const { token } = useAuth();
   const [posts, setPosts] = useState<PostItem[]>([]);
@@ -23,15 +32,38 @@ export function BlogListPage() {
   const [error, setError] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PostItem | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [pinningSlug, setPinningSlug] = useState<string | null>(null);
 
   useEffect(() => {
     if (!token) return;
     setLoading(true);
     listBlogs(token)
-      .then(setPosts)
+      .then((items) => setPosts(sortPosts(items)))
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
   }, [token]);
+
+  async function handleTogglePinned(post: PostItem) {
+    if (!token) return;
+    setPinningSlug(post.slug);
+    setError(null);
+
+    try {
+      const nextPinned = !post.pinned;
+      await setBlogPinned(token, post.slug, nextPinned);
+      setPosts((prev) =>
+        sortPosts(
+          prev.map((item) =>
+            item.slug === post.slug ? { ...item, pinned: nextPinned } : item
+          )
+        )
+      );
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setPinningSlug(null);
+    }
+  }
 
   async function handleDelete(e: React.MouseEvent) {
     e.preventDefault();
@@ -119,6 +151,20 @@ export function BlogListPage() {
                 )}
               </div>
               <div className="ml-4 flex items-center gap-2">
+                <Button
+                  variant={blog.pinned ? "default" : "outline"}
+                  size="sm"
+                  disabled={pinningSlug === blog.slug}
+                  onClick={() => handleTogglePinned(blog)}
+                >
+                  {pinningSlug === blog.slug ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : blog.pinned ? (
+                    "Unpin"
+                  ) : (
+                    "Pin"
+                  )}
+                </Button>
                 <Button asChild variant="ghost" size="sm">
                   <Link to={`/editor/${blog.slug}`}>
                     <Pencil className="h-4 w-4" />

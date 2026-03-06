@@ -13,6 +13,7 @@ interface BlogIndexPost {
   slug: string;
   title: string;
   date: string;
+  pinned?: boolean;
   tags?: string[];
   source?: string;
   cover?: string;
@@ -127,6 +128,7 @@ function parseFrontmatter(raw: string): { frontmatter: BlogFrontmatter; content:
     frontmatter: {
       title: fm.title || "Untitled",
       date: fm.date || new Date().toISOString().slice(0, 10),
+      pinned: fm.pinned === "true",
       cover: fm.cover,
       source: fm.source,
       tags,
@@ -158,6 +160,7 @@ function serializeFrontmatter(fm: BlogFrontmatter): string {
   const lines = ["---"];
   lines.push(safeYamlTitle(fm.title));
   lines.push(`date: ${escapeYamlString(fm.date)}`);
+  if (fm.pinned) lines.push("pinned: true");
   if (fm.cover) lines.push(`cover: ${escapeYamlString(fm.cover)}`);
   if (fm.source) lines.push(`source: ${escapeYamlString(fm.source)}`);
   if (fm.tags && fm.tags.length > 0) {
@@ -205,6 +208,9 @@ async function listBlogAssetFilePaths(token: string, slug: string): Promise<stri
 
 function sortBlogIndexPosts(posts: BlogIndexPost[]): BlogIndexPost[] {
   return [...posts].sort((a, b) => {
+    if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+      return a.pinned ? -1 : 1;
+    }
     const dateDiff = Date.parse(b.date) - Date.parse(a.date);
     if (!Number.isNaN(dateDiff) && dateDiff !== 0) return dateDiff;
     return 0;
@@ -228,6 +234,7 @@ function normalizeBlogIndexPosts(indexFile: BlogIndexFile): BlogIndexPost[] {
       slug: post.slug,
       title: post.title,
       date: post.date,
+      pinned: post.pinned === true,
       tags: Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [],
       source: typeof post.source === "string" ? post.source : undefined,
       cover: typeof post.cover === "string" ? post.cover : undefined,
@@ -249,6 +256,7 @@ function toBlogIndexPost(slug: string, frontmatter: BlogFrontmatter): BlogIndexP
     slug,
     title: frontmatter.title,
     date: frontmatter.date,
+    pinned: frontmatter.pinned === true,
     tags: frontmatter.tags || [],
     source: frontmatter.source,
     cover: frontmatter.cover,
@@ -322,6 +330,7 @@ function normalizeIndexPosts(indexFile: BlogIndexFile): PostItem[] {
       slug: post.slug,
       title: post.title,
       date: post.date,
+      pinned: post.pinned === true,
       tags: Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [],
     }));
 }
@@ -380,6 +389,7 @@ export async function listBlogs(token: string): Promise<PostItem[]> {
         slug: dir.name,
         title: frontmatter.title,
         date: frontmatter.date,
+        pinned: frontmatter.pinned === true,
         tags: frontmatter.tags || [],
       };
     })
@@ -391,7 +401,12 @@ export async function listBlogs(token: string): Promise<PostItem[]> {
     }
   }
 
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return posts.sort((a, b) => {
+    if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+      return a.pinned ? -1 : 1;
+    }
+    return a.date < b.date ? 1 : -1;
+  });
 }
 
 export async function getBlog(token: string, slug: string): Promise<BlogPost> {
@@ -412,6 +427,22 @@ export async function getBlog(token: string, slug: string): Promise<BlogPost> {
   const { frontmatter, content } = parseFrontmatter(raw);
 
   return { slug, frontmatter, content, sha: data.sha };
+}
+
+export async function setBlogPinned(
+  token: string,
+  slug: string,
+  pinned: boolean
+): Promise<void> {
+  const blog = await getBlog(token, slug);
+  await saveBlog(
+    token,
+    slug,
+    { ...blog.frontmatter, pinned },
+    blog.content,
+    [],
+    false
+  );
 }
 
 /**

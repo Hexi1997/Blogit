@@ -13,6 +13,7 @@ export interface AuthState {
 export interface BlogFrontmatter {
   title: string;
   date: string;
+  pinned?: boolean;
   cover?: string;
   source?: string;
   tags?: string[];
@@ -22,6 +23,7 @@ export interface PostItem {
   slug: string;
   title: string;
   date: string;
+  pinned?: boolean;
   tags?: string[];
 }
 

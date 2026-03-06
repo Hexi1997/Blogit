@@ -159,6 +159,10 @@ function normalizeTags(rawTags: unknown): string[] {
   return [];
 }
 
+function isPinnedValue(value: unknown): boolean {
+  return value === true;
+}
+
 /**
  * Get metadata for all blog posts (for list pages).
  */
@@ -220,6 +224,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
         slug,
         title: matterResult.data.title,
         date: matterResult.data.date || new Date().toISOString(),
+        pinned: isPinnedValue(matterResult.data.pinned),
         author: "WORLD3",
         description,
         cover,
@@ -231,6 +236,9 @@ export function getAllBlogPosts(): BlogMetadata[] {
 
   // Sort by date descending
   const sortedPosts = allPostsData.sort((a, b) => {
+    if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+      return a.pinned ? -1 : 1;
+    }
     if (a.date < b.date) {
       return 1;
     } else {
@@ -349,6 +357,7 @@ export async function getBlogPostBySlug(
       slug,
       title: matterResult.data.title || "Untitled",
       date: matterResult.data.date || new Date().toISOString(),
+      pinned: isPinnedValue(matterResult.data.pinned),
       author: "WORLD3",
       description,
       cover,

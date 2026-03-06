@@ -30,6 +30,10 @@ function toDateValue(date) {
   return Number.isNaN(t) ? 0 : t;
 }
 
+function isPinnedValue(value) {
+  return value === true;
+}
+
 function loadPostIndexItem(slug) {
   const markdownPath = path.join(POSTS_DIR, slug, 'index.md');
   if (!fs.existsSync(markdownPath)) return null;
@@ -44,6 +48,7 @@ function loadPostIndexItem(slug) {
       typeof data.date === 'string' && data.date.trim()
         ? data.date.trim()
         : new Date().toISOString().slice(0, 10),
+    pinned: isPinnedValue(data.pinned),
     tags: normalizeTags(data.tags),
     source: typeof data.source === 'string' ? data.source : undefined,
     cover: typeof data.cover === 'string' ? data.cover : undefined,
@@ -60,7 +65,12 @@ function generatePostIndex() {
     .filter((entry) => entry.isDirectory())
     .map((entry) => loadPostIndexItem(entry.name))
     .filter(Boolean)
-    .sort((a, b) => toDateValue(b.date) - toDateValue(a.date));
+    .sort((a, b) => {
+      if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+        return a.pinned ? -1 : 1;
+      }
+      return toDateValue(b.date) - toDateValue(a.date);
+    });
 
   const result = {
     count: posts.length,

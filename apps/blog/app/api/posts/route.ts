@@ -34,7 +34,12 @@ export async function GET() {
     // Filter out null values (should not happen in practice) and sort by date desc
     const filtered = posts
       .filter((p): p is NonNullable<typeof p> => Boolean(p))
-      .sort((a, b) => (a.date < b.date ? 1 : -1));
+      .sort((a, b) => {
+        if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+          return a.pinned ? -1 : 1;
+        }
+        return a.date < b.date ? 1 : -1;
+      });
 
     return NextResponse.json({ posts: filtered });
   } catch (error) {
