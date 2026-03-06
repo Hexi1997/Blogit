@@ -19,10 +19,12 @@ export function BlogHeader() {
         </a>
         <nav>
           <a
-            href="/"
+            href="https://github.com/Hexi1997/Blogit"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900"
           >
-            Blog
+            GitHub
           </a>
         </nav>
       </div>
