@@ -1,123 +1,126 @@
-# Blogit
+# BLOGIT
 
 [English](./README.md) | [中文](./README_CN.md)
 
-Blogit is a pnpm monorepo for a Markdown-first blog system:
+<h1 align="center">A Git-powered, local-first blogging system</h1>
 
-- `apps/blog`: public blog site built with Next.js 16 (App Router), deployed to Cloudflare via OpenNext.
-- `apps/admin`: password-protected admin panel built with React + Vite, deployed on Cloudflare Pages Functions, writing blog content directly to GitHub with the Git Data API.
+- **Content as code**: content is code, and posts are Markdown files in your repository.
+- **Publishing as push**: publishing is pushing, directly through your existing Git/CI/CD workflow.
+- **Cloneable and forkable**: cloneable and forkable, the whole blogging system is portable and reproducible.
+- **No platform lock-in**: no platform lock-in and no dependency on third-party image hosting.
+- **SEO optimized by default**: powered by SSG static generation, with built-in `metadata`, `sitemap.xml`, and `robots.txt` for search-engine friendliness.
+- **Visual admin panel**: includes an admin system with Markdown block-level editing, so non-technical users can also write and manage content easily.
 
-## Core Value
+## I. Quick Start
 
-**Own your content. For real.**
+### 1. Use this template
 
-Blogit is designed around content ownership instead of platform dependency:
+Click [Use this template](https://github.com/new?template_name=Blogit&template_owner=Hexi1997) to create your own repository (Public) from the Blogit template, then clone it locally and install dependencies.
 
-- **Content as code**: posts are plain Markdown files in your own Git repo.
-- **Local media, no image CDN lock-in**: image assets are stored with each post (`posts/<slug>/assets`), without third-party image hosting.
-- **Writing as commit**: every edit is a Git commit with full history and diff.
-- **Publishing as push**: publish by pushing changes through your existing CI/CD flow.
-- **Cloneable and forkable**: your blog system is portable and reproducible.
-- **No platform lock-in**: no proprietary CMS data silo; files stay with you.
+### 2. Update repo config in [config.ts](apps/admin/src/lib/config.ts)
 
-## 1. What This Repo Includes
+Change it to the owner and repo name of the repository created in step 1.
 
-- Markdown content lives in `apps/blog/posts/<slug>/index.md`.
-- Per-post assets live in `apps/blog/posts/<slug>/assets/*`.
-- Blog list index cache: `apps/blog/posts/_index.json`.
-- Public blog runtime:
-  - SSG pages
+### 3. Generate a GitHub PAT and initialize local Admin variables
+
+Create a [GitHub Personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) with repository write permissions, then copy [.dev.vars.example](apps/admin/.dev.vars.example) to `.dev.vars`:
+
+Then update values in `.dev.vars`:
+  - `ADMIN_PAT=<your_github_pat>`
+  - `ADMIN_PASSWORD_HASH=<sha256_of_password>` (you can generate it at https://emn178.github.io/online-tools/sha256.html)
+
+### 4. Configure Giscus comments and write Blog env vars
+> Giscus env vars are optional. If not configured, the comment area will not be shown.
+
+Enable [Discussions](https://docs.github.com/en/discussions/quickstart#enabling-github-discussions-on-your-repository) in your repo and install [Giscus App](https://github.com/apps/giscus), then visit [giscus.app](https://giscus.app) to generate parameters and write them into [.env](apps/blog/.env):
+  - `NEXT_PUBLIC_GISCUS_REPO`
+  - `NEXT_PUBLIC_GISCUS_REPO_ID`
+  - `NEXT_PUBLIC_GISCUS_CATEGORY`
+  - `NEXT_PUBLIC_GISCUS_CATEGORY_ID`
+
+### 5. Configure GitHub Action environment variables
+
+Log in to Cloudflare, create an `Account API Token` (the `Edit Cloudflare Workers` template is enough with proper permissions), and get your `Account ID`.
+
+In your repository at `Settings -> Secrets and variables -> Actions -> Repository secrets`, configure:
+  - `CLOUDFLARE_API_TOKEN`
+  - `CLOUDFLARE_ACCOUNT_ID`
+  - `ADMIN_PAT`
+  - `ADMIN_PASSWORD_HASH`
+
+### 6. Commit and Push
+
+  - Commit all changes to GitHub.
+  - After GitHub workflows finish, you can find deployment URLs for `blogit-admin` and `blogit-blog` under `Cloudflare Workers and Pages`.
+  - Get the deployment URL of `blogit-blog` and update `NEXT_PUBLIC_SITE_URL` in [.env](apps/blog/.env).
+
+## II. Project Overview
+
+### 1. Introduction
+Blogit is a pnpm monorepo Markdown blog system with two applications:
+
+- `apps/blog`: reader-facing blog site, built with Next.js 16 (App Router), deployed to Cloudflare via OpenNext.
+- `apps/admin`: admin application for visual blog CRUD operations. Built with React + Vite + Cloudflare Pages Functions, and writes content directly via GitHub Git Data API.
+
+### 2. Project Content
+
+- Post source of truth: `apps/blog/posts/<slug>/index.md`
+- Post assets: `apps/blog/posts/<slug>/assets/`*
+- Post index cache: [apps/blog/posts/_index.json](apps/blog/posts/_index.json)
+- Blog capabilities:
+  - SSG static pages
   - SEO (`sitemap.xml`, `robots.txt`, metadata)
   - Giscus comments
-  - Math (KaTeX), code highlighting (Shiki), copy-code and image preview enhancements
-- Admin runtime:
-  - Simple password login
+  - KaTeX math, Shiki code highlighting, code copy, image preview enhancement
+  - Tag system
+- Admin capabilities:
+  - Password login
   - Post list / create / edit / delete
-  - Atomic commits to GitHub (content + images + `_index.json` in one commit)
+  - Atomic commit (content + images + `_index.json` in one commit)
 
-## 2. Monorepo Structure
+## III. Directory Structure
 
 ```text
-.
 ├── apps/
-│   ├── blog/                  # Public blog (Next.js 16)
+│   ├── blog/                  # Public blog
 │   │   ├── app/
 │   │   ├── posts/             # Markdown source of truth
 │   │   ├── public/
 │   │   └── scripts/
-│   └── admin/                 # Admin panel (React + Vite + CF Pages Functions)
-├── package.json               # Workspace scripts
+│   └── admin/                 # Admin
+├── package.json
 └── pnpm-workspace.yaml
 ```
 
-## 3. Prerequisites
-
-- Node.js 20+ recommended
-- pnpm `10.30.0` (declared in root `packageManager`)
-- A GitHub Personal Access Token (PAT) with repo write permission (for admin)
-- Cloudflare account (for deployment)
-
-## 4. Install Dependencies
+## IV. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-## 5. Run Locally
+## V. Local Development
 
-### 5.1 Start Both Apps
+### 1. Start both apps
 
 ```bash
 pnpm dev
 ```
 
-### 5.2 Start Individual Apps
+### 2. Start individually
 
 ```bash
 pnpm dev:blog
 pnpm dev:admin
 ```
 
-Default local endpoints:
+Common local URLs:
 
 - Blog: `http://localhost:3000`
-- Admin: Wrangler Pages dev prints its own URL (commonly `http://localhost:8788`)
+- Admin: printed by Wrangler Pages dev (`http://localhost:8788`)
 
-## 6. Environment Variables
+## VI. Blog Content Management
 
-### 6.1 Blog (`apps/blog`)
-
-The blog expects:
-
-- `NEXT_PUBLIC_SITE_URL` (required): canonical site URL, used by metadata/sitemap/robots.
-
-Example:
-
-```bash
-cd apps/blog
-echo 'NEXT_PUBLIC_SITE_URL=https://your-blog-domain.com' > .env.local
-```
-
-### 6.2 Admin (`apps/admin`)
-
-Admin Pages Function `functions/api/auth/login.ts` uses:
-
-- `ADMIN_PAT`: GitHub PAT used by server-side login response and GitHub API writes.
-- `ADMIN_PASSWORD_HASH`: SHA-256 hash of the login password.
-
-Create SHA-256 hash:
-
-```bash
-printf "your-password" | shasum -a 256
-```
-
-Set secrets in Cloudflare Pages project (Production/Preview), and use `.dev.vars` for local wrangler dev.
-
-## 7. Blog Content Workflow
-
-### 7.1 Post Format
-
-Path:
+### 1. Directory Structure
 
 ```text
 apps/blog/posts/<slug>/
@@ -125,99 +128,37 @@ apps/blog/posts/<slug>/
 └── assets/
 ```
 
+### 2. Frontmatter Example
+
 Frontmatter example:
 
 ```yaml
 ---
-title: "Post Title"
+title: "Post title"
 date: "2026-03-05"
 cover: "assets/cover.webp"
 tags:
   - nextjs
   - cloudflare
-source: "https://example.com/original-link" # optional external source
+source: "https://example.com/original-link" # optional external link post
 ---
 ```
 
-Notes:
+### 3. Field Descriptions
 
-- If `cover` is missing, blog auto-falls back to first image in markdown, then `/default-cover.png`.
-- If `source` is set, the list card links to external URL directly.
-- Relative image paths are resolved from post assets.
+- **title** (required): post title
+- **date** (required): publish date, format: YYYY-MM-DD
+- **cover** (optional): cover image path; supports relative paths (for example, `assets/cover.jpg`) or external URLs (for example, `https://example.com/image.jpg`). If missing, the system tries the first image in markdown; if none exists, it falls back to `/default-cover.png`.
+- **source** (optional): external article URL. If set, clicking the card in the list redirects directly to this external URL (opens in a new tab), instead of the internal post detail page. The source link is also shown at the bottom of the post detail page. Useful for third-party content references.
+- **tags** (optional): post tags. Supports YAML array format, for example `tags: ["nextjs", "react"]` or multiline list format.
 
-### 7.2 Index and Assets
+> **Important:** The site does not fetch content from external links automatically. The blog list still needs summary/description text, so you must provide content in the `index.md` body manually. The system extracts text from markdown and generates the card description.
 
-Useful scripts in `apps/blog`:
+### 4. Index and Asset Sync
 
-- `pnpm --filter blog run generate-index`: regenerate `posts/_index.json`.
-- `pnpm --filter blog run sync-assets`: sync `posts/*/assets` to `public/blog-assets` for static serving.
+- `pnpm --filter blog run generate-index`: rebuild `posts/_index.json` (automatically handled by [workflow](.github/workflows/sync-post-index.yml), no manual local run needed)
+- `pnpm --filter blog run sync-assets`: sync `posts/*/assets` to `public/blog-assets` (automatically handled by [workflow](.github/workflows/deploy-blog.yml), no manual local run needed)
 
-Admin writes `_index.json` during save/delete operations, so manual generation is usually unnecessary when editing through admin.
+## VII. License
 
-## 8. Build and Deploy
-
-### 8.1 Workspace Build
-
-```bash
-pnpm build
-```
-
-### 8.2 Deploy Blog (OpenNext + Cloudflare)
-
-```bash
-pnpm --filter blog run preview   # local preview with OpenNext Cloudflare runtime
-pnpm --filter blog run deploy    # deploy worker/assets per wrangler config
-```
-
-### 8.3 Deploy Admin (Cloudflare Pages)
-
-```bash
-pnpm --filter admin run build
-pnpm --filter admin run deploy
-```
-
-## 9. Repo Configuration You Should Update
-
-Edit:
-
-- `apps/admin/src/lib/config.ts`
-
-`BLOG_REPO_CONFIG` defaults to:
-
-- `owner: "Hexi1997"`
-- `repo: "Blogit"`
-- `blogPath: "apps/blog/posts"`
-- `branch: "main"`
-
-Change these to your own repo if you fork/use this project.
-
-## 10. Script Reference
-
-Root:
-
-- `pnpm dev`: run all app dev scripts in parallel
-- `pnpm dev:blog`
-- `pnpm dev:admin`
-- `pnpm build`
-- `pnpm build:blog`
-- `pnpm build:admin`
-- `pnpm preview:blog`
-
-Blog app:
-
-- `pnpm --filter blog run dev`
-- `pnpm --filter blog run build`
-- `pnpm --filter blog run preview`
-- `pnpm --filter blog run deploy`
-- `pnpm --filter blog run generate-index`
-- `pnpm --filter blog run sync-assets`
-
-Admin app:
-
-- `pnpm --filter admin run dev`
-- `pnpm --filter admin run build`
-- `pnpm --filter admin run deploy`
-
-## 11. License
-
-MIT License. See [LICENSE](./LICENSE).
+MIT License, see [LICENSE](./LICENSE).
