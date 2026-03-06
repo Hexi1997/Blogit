@@ -2,12 +2,9 @@
 title: 'Markdown Syntax Showcase'
 date: '2026-03-06'
 tags:
-  - 'Markdown'
-  - 'Demo'
   - 'Blogit'
+  - 'Markdown Preview'
 ---
-
-# Markdown Syntax Showcase
 
 This post demonstrates common Markdown capabilities supported by Blogit, including headings, lists, links, blockquotes, code blocks, tables, images, and LaTeX.
 
@@ -21,17 +18,21 @@ You can write **bold text**, *italic text*, ***bold italic text***, ~~strikethro
 
 ## Links
 
-- [OpenAI](https://openai.com)
-- [GitHub](https://github.com)
-- <https://blogit.dev>
+* [OpenAI](https://openai.com)
+
+* [GitHub](https://github.com)
+
+* <https://blogit.dev>
 
 ## Lists
 
 ### Unordered List
 
-- Write locally
-- Track changes with Git
-- Publish with CI/CD
+* Write locally
+
+* Track changes with Git
+
+* Publish with CI/CD
 
 ### Ordered List
 
@@ -41,10 +42,13 @@ You can write **bold text**, *italic text*, ***bold italic text***, ~~strikethro
 
 ### Task List
 
-- [x] Markdown support
-- [x] Code highlighting
-- [x] LaTeX rendering
-- [ ] More demo components
+* [x] Markdown support
+
+* [x] Code highlighting
+
+* [x] LaTeX rendering
+
+* [ ] More demo components
 
 ## Quote
 
@@ -56,7 +60,7 @@ You can write **bold text**, *italic text*, ***bold italic text***, ~~strikethro
 
 Here is a local image stored with the post:
 
-![Blogit Markdown demo illustration](assets/cover.png)
+![1.00](assets/cover.png)
 
 ## Code Blocks
 
@@ -88,16 +92,16 @@ pnpm --filter blog dev
 
 ## Table
 
-| Feature | Syntax | Supported |
-| --- | --- | --- |
-| Bold | `**text**` | Yes |
-| Image | `![alt](path)` | Yes |
-| Table | `\| col \|` | Yes |
-| Math | `$E=mc^2$` | Yes |
+| Feature | Syntax         | Supported |
+| ------- | -------------- | --------- |
+| Bold    | `**text**`     | Yes       |
+| Image   | `![alt](path)` | Yes       |
+| Table   | `\| col \|`    | Yes       |
+| Math    | `$E=mc^2$`     | Yes       |
 
 ## Horizontal Rule
 
----
+***
 
 ## Inline Math
 
@@ -132,14 +136,15 @@ def predict(m, x, b):
     return m * x + b
 ```
 
-3. Document it in a table:
+1. Document it in a table:
 
-| Variable | Meaning |
-| --- | --- |
-| `m` | slope |
-| `x` | input |
-| `b` | intercept |
+| Variable | Meaning   |
+| -------- | --------- |
+| `m`      | slope     |
+| `x`      | input     |
+| `b`      | intercept |
 
 ## Final Note
 
 If this post renders correctly, Blogit is handling the core Markdown syntax you expect from a modern blogging system.
+
