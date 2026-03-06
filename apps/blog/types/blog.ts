@@ -8,7 +8,6 @@ export interface BlogPost {
   content: string;
   source?: string;
   tags?: string[];
-  pinned?: boolean; // Whether the post is pinned (top 4 after sorting)
 }
 
 export interface BlogMetadata {
@@ -20,5 +19,4 @@ export interface BlogMetadata {
   cover: string;
   source?: string;
   tags?: string[];
-  pinned?: boolean; // Whether the post is pinned (top 4 after sorting)
 }

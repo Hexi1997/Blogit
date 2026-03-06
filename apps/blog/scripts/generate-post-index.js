@@ -63,7 +63,6 @@ function generatePostIndex() {
     .sort((a, b) => toDateValue(b.date) - toDateValue(a.date));
 
   const result = {
-    generatedAt: new Date().toISOString(),
     count: posts.length,
     posts,
   };

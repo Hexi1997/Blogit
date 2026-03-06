@@ -1,6 +1,5 @@
 {
-  "generatedAt": "2026-03-06T07:44:17.702Z",
-  "count": 1,
+  "count": 2,
   "posts": [
     {
       "slug": "markdown-syntax-showcase",
@@ -10,8 +9,7 @@
         "Markdown",
         "Demo",
         "Blogit"
-      ],
-      "cover": "assets/cover.svg"
+      ]
     },
     {
       "slug": "the-story-behind-blogit-why-i-built-a",

@@ -238,11 +238,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
     }
   });
 
-  // Mark top 4 posts as pinned
-  return sortedPosts.map((post, index) => ({
-    ...post,
-    pinned: index < 4,
-  }));
+  return sortedPosts;
 }
 
 /**
@@ -349,11 +345,6 @@ export async function getBlogPostBySlug(
     const source = matterResult.data.source;
     const tags = normalizeTags(matterResult.data.tags);
 
-    // Determine whether the post is pinned (requires sorted full post list)
-    const allPosts = getAllBlogPosts();
-    const postIndex = allPosts.findIndex((post) => post.slug === slug);
-    const pinned = postIndex !== -1 && postIndex < 4;
-
     return {
       slug,
       title: matterResult.data.title || "Untitled",
@@ -364,7 +355,6 @@ export async function getBlogPostBySlug(
       content: contentHtml,
       source,
       tags,
-      pinned,
     };
   } catch (error) {
     console.error(`Error loading blog post: ${slug}`, error);
