@@ -1,13 +1,7 @@
 {
-  "generatedAt": "2026-03-05T06:31:26.581Z",
-  "count": 7,
+  "generatedAt": "2026-03-06T07:03:11.088Z",
+  "count": 6,
   "posts": [
-    {
-      "slug": "cong-shadcn-ui-button-dao-ke-ding-zhi",
-      "title": "从 shadcn/ui Button 到可定制 loading 的业务按钮",
-      "date": "2026-02-28",
-      "tags": []
-    },
     {
       "slug": "cong-zu-jian-wai-ye-neng-gai-zustand",
       "title": "从 \"组件外也能改 Zustand 状态\" 聊到它的底层原理",
