@@ -60,7 +60,7 @@ You can write **bold text**, *italic text*, ***bold italic text***, ~~strikethro
 
 Here is a local image stored with the post:
 
-![1.00](assets/cover.png)
+![1.00](assets/cover.png "image caption")
 
 ## Code Blocks
 
