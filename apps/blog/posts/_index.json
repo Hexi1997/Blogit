@@ -1,5 +1,14 @@
 {
-  "generatedAt": "2026-03-06T07:05:03.916Z",
-  "count": 0,
-  "posts": []
+  "generatedAt": "2026-03-06T07:33:04.282Z",
+  "count": 1,
+  "posts": [
+    {
+      "slug": "the-story-behind-blogit-why-i-built-a",
+      "title": "The Story Behind Blogit: Why I Built a Git-Powered, Local-First Blogging System",
+      "date": "2026-03-06",
+      "tags": [
+        "Blogit"
+      ]
+    }
+  ]
 }
