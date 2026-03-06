@@ -1,5 +1,5 @@
 {
-  "count": 2,
+  "count": 3,
   "posts": [
     {
       "slug": "markdown-syntax-showcase",
@@ -17,6 +17,17 @@
       "tags": [
         "Blogit"
       ]
+    },
+    {
+      "slug": "why-i-chose-milkdown-for-blogit-admin",
+      "title": "Why I Chose Milkdown as the Markdown Editor for Blogit Admin",
+      "date": "2026-03-06",
+      "tags": [
+        "Blogit",
+        "Admin",
+        "Milkdown"
+      ],
+      "cover": "assets/cover.png"
     }
   ]
 }
