@@ -17,7 +17,15 @@ export function BlogHeader() {
             <span className="bg-black text-lg text-white font-anta">BLOGIT</span>
           </div>
         </a>
-        <nav>
+        <nav className="flex items-center gap-4">
+          <a
+            href="/rss.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900"
+          >
+            RSS
+          </a>
           <a
             href="https://github.com/Hexi1997/Blogit"
             target="_blank"
