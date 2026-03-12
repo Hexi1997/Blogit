@@ -156,7 +156,7 @@ source: "https://example.com/original-link" # optional external link post
 - **title** (required): post title
 - **date** (required): publish date, format: YYYY-MM-DD
 - **pinned** (optional): whether the post is pinned. Pinned posts are sorted before non-pinned posts; when multiple posts are pinned, they are still ordered by date descending.
-- **cover** (optional): cover image path; supports relative paths (for example, `assets/cover.jpg`) or external URLs (for example, `https://example.com/image.jpg`). If missing, the system tries the first image in markdown; if none exists, it falls back to `/default-cover.png`.
+- **cover** (optional): cover image path; supports relative paths (for example, `assets/cover.jpg`) or external URLs (for example, `https://example.com/image.jpg`). If missing, the system tries the first image in markdown; if none exists, it falls back to `/default-cover.webp`.
 - **source** (optional): external article URL. If set, clicking the card in the list redirects directly to this external URL (opens in a new tab), instead of the internal post detail page. The source link is also shown at the bottom of the post detail page. Useful for third-party content references.
 - **tags** (optional): post tags. Supports YAML array format, for example `tags: ["nextjs", "react"]` or multiline list format.
 

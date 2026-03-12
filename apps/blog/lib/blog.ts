@@ -201,7 +201,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
 
       // Fallback to default image
       if (!cover) {
-        cover = "/default-cover.png";
+        cover = "/default-cover.webp";
       }
 
       // Only transform relative paths (not absolute or external URLs)
@@ -335,7 +335,7 @@ export async function getBlogPostBySlug(
 
     // Fallback to default image
     if (!cover) {
-      cover = "/default-cover.png";
+      cover = "/default-cover.webp";
     }
 
     // Only transform relative paths (not absolute or external URLs)
