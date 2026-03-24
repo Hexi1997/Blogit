@@ -1,11 +1,12 @@
 ---
 title: 'Why I Chose Milkdown as the Markdown Editor for Blogit Admin'
 date: '2026-03-06'
+pinned: true
+cover: 'assets/cover.png'
 tags:
   - 'Blogit'
   - 'Admin'
   - 'Milkdown'
-cover: assets/cover.png
 ---
 
 When building **Blogit Admin**, I wasn’t looking for a generic rich text editor. I wanted an editor that felt good for writing while still preserving Markdown.
