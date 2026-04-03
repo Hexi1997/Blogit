@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
+import { Pin } from "lucide-react";
 import { BlogMetadata } from "@/types/blog";
 import {
   Pagination,
@@ -165,8 +166,14 @@ export function BlogList({ posts }: { posts: BlogMetadata[] }) {
                 className="block py-5 -mx-3 px-3 rounded-lg group hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <h2 className="font-display font-semibold text-[17px] leading-snug text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-2">
+                  <h2 className="font-display font-semibold text-[17px] leading-snug text-gray-900 group-hover:text-gray-700 transition-colors">
                     {post.title}
+                    {post.pinned ? (
+                      <Pin
+                        width={16}
+                        className="ml-1 shrink-0 -translate-y-[1px] inline-block rotate-[30deg]"
+                      />
+                    ) : null}
                   </h2>
                   <time
                     dateTime={post.date}
