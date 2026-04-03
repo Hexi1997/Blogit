@@ -156,7 +156,7 @@ source: "https://example.com/original-link" # 可选，外链文章
 - **title** (必需)：文章标题
 - **date** (必需)：发布日期，格式：YYYY-MM-DD
 - **pinned** (可选)：是否置顶文章。置顶文章会排在非置顶文章前面；如果有多篇置顶文章，它们之间仍然按日期倒序排列。
-- **cover** (可选)：封面图片路径，支持相对路径（如 `assets/cover.jpg`）或外部 URL（如 `https://example.com/image.jpg`）。如果未设置，系统会自动提取 markdown 内容中的第一张图片作为封面；如果内容中没有图片，则使用占位图 `/default-cover.webp`
+- **cover**（可选）：封面图片路径，支持相对路径（如 `assets/cover.jpg`）或外部 URL（如 `https://example.com/image.jpg`）。如果未设置，文章页面会回退到动态生成的 OG 图片，其中包含 Blogit 品牌、文章标题和 tags。
 - **source** (可选)：外部文章链接。当设置此字段时，点击博客列表中的文章会直接跳转到该外部链接（新标签页打开），而不是内部博客详情页。在博客详情页底部也会显示来源链接。适用于引用第三方内容的场景
 - **tags** (可选)：文章标签。支持 YAML 数组格式，例如 `tags: ["nextjs", "react"]` 或多行列表写法
 

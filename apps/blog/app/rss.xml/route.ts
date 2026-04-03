@@ -28,7 +28,7 @@ function getBaseUrl(): string {
   return "";
 }
 
-function normalizeCover(cover: string, baseUrl: string): string | null {
+function normalizeCover(cover: string | undefined, baseUrl: string): string | null {
   if (!cover) return null;
   const normalizedPath = cover.replace("/api/blog-assets", "/blog-assets");
   const isAbsolute =

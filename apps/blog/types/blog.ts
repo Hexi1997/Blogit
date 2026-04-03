@@ -5,7 +5,7 @@ export interface BlogPost {
   pinned?: boolean;
   author: string;
   description: string; // Auto-extracted from content when not specified in frontmatter
-  cover: string;
+  cover?: string;
   content: string;
   source?: string;
   tags?: string[];
@@ -18,7 +18,7 @@ export interface BlogMetadata {
   pinned?: boolean;
   author: string;
   description: string; // Auto-extracted from content when not specified in frontmatter
-  cover: string;
+  cover?: string;
   source?: string;
   tags?: string[];
 }

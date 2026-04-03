@@ -33,33 +33,25 @@ function convertImageTitleToCaption(contentHtml: string): string {
   );
 }
 
-/**
- * Extract the first image from markdown content.
- * @param content markdown content
- * @returns image path (relative path or https URL) or null
- */
-function extractFirstImage(content: string): string | null {
-  // Match markdown image syntax: ![alt](path)
-  const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/;
-  const match = content.match(imageRegex);
-
-  if (match && match[2]) {
-    let imagePath = match[2].trim();
-
-    // Return as-is for external URLs (http/https)
-    if (imagePath.startsWith("http")) {
-      return imagePath;
-    }
-
-    // If path starts with "/", strip the leading "/" for internal asset resolution
-    if (imagePath.startsWith("/")) {
-      imagePath = imagePath.substring(1);
-    }
-
-    return imagePath;
+function resolveCoverPath(
+  cover: unknown,
+  slug: string
+): string | undefined {
+  if (typeof cover !== "string" || !cover.trim()) {
+    return undefined;
   }
 
-  return null;
+  const normalizedCover = cover.trim();
+  const isRelativePath =
+    !normalizedCover.startsWith("/") && !normalizedCover.startsWith("http");
+
+  if (!isRelativePath) {
+    return normalizedCover;
+  }
+
+  const isDev = process.env.NODE_ENV === "development";
+  const prefix = isDev ? "/api/blog-assets" : "/blog-assets";
+  return `${prefix}/${slug}/${normalizedCover}`;
 }
 
 /**
@@ -191,27 +183,7 @@ export function getAllBlogPosts(): BlogMetadata[] {
       // Parse frontmatter with gray-matter
       const matterResult = matter(fileContents);
 
-      // Resolve cover image: metadata > first image in content > default image
-      let cover = matterResult.data.cover;
-
-      // If cover is missing in metadata, try first image from content
-      if (!cover) {
-        cover = extractFirstImage(matterResult.content);
-      }
-
-      // Fallback to default image
-      if (!cover) {
-        cover = "/default-cover.webp";
-      }
-
-      // Only transform relative paths (not absolute or external URLs)
-      const isRelativePath =
-        !cover.startsWith("/") && !cover.startsWith("http");
-      if (isRelativePath) {
-        const isDev = process.env.NODE_ENV === "development";
-        const prefix = isDev ? "/api/blog-assets" : "/blog-assets";
-        cover = `${prefix}/${slug}/${cover}`;
-      }
+      const cover = resolveCoverPath(matterResult.data.cover, slug);
 
       // Auto-extract description from content
       const description = extractPlainTextDescription(matterResult.content);
@@ -325,26 +297,7 @@ export async function getBlogPostBySlug(
       }
     );
 
-    // Resolve cover image: metadata > first image in content > default image
-    let cover = matterResult.data.cover;
-
-    // If cover is missing in metadata, try first image from content
-    if (!cover) {
-      cover = extractFirstImage(matterResult.content);
-    }
-
-    // Fallback to default image
-    if (!cover) {
-      cover = "/default-cover.webp";
-    }
-
-    // Only transform relative paths (not absolute or external URLs)
-    const isRelativePath = !cover.startsWith("/") && !cover.startsWith("http");
-    if (isRelativePath) {
-      const isDev = process.env.NODE_ENV === "development";
-      const prefix = isDev ? "/api/blog-assets" : "/blog-assets";
-      cover = `${prefix}/${slug}/${cover}`;
-    }
+    const cover = resolveCoverPath(matterResult.data.cover, slug);
 
     // Auto-extract description from content
     const description = extractPlainTextDescription(matterResult.content);

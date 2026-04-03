@@ -36,26 +36,18 @@ export async function generateMetadata({
     };
   }
 
-  // Get base URL
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
-
-  // Ensure image URL is absolute
-  // If already absolute (http/https), keep it
-  // If relative, convert to absolute URL
-  let imageUrl = post.cover;
-  if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
-    // Ensure leading slash
-    if (!imageUrl.startsWith("/")) {
-      imageUrl = `/${imageUrl}`;
-    }
-    // Build full absolute URL
-    imageUrl = `${baseUrl}${imageUrl}`;
-  }
-
-  // In production, ensure dev API route is not used
-  if (process.env.NODE_ENV === "production") {
-    imageUrl = imageUrl.replace("/api/blog-assets", "/blog-assets");
-  }
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
+  const ogImagePath = post.cover || `/blog/${slug}/opengraph-image`;
+  const normalizedOgImagePath =
+    process.env.NODE_ENV === "production"
+      ? ogImagePath.replace("/api/blog-assets", "/blog-assets")
+      : ogImagePath;
+  const imageUrl =
+    normalizedOgImagePath.startsWith("http://") ||
+    normalizedOgImagePath.startsWith("https://") ||
+    !baseUrl
+      ? normalizedOgImagePath
+      : `${baseUrl}${normalizedOgImagePath.startsWith("/") ? "" : "/"}${normalizedOgImagePath}`;
 
   return {
     title: `${post.title}`,

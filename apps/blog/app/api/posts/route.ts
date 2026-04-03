@@ -14,19 +14,19 @@ export async function GET() {
       slugs.map(async (slug) => {
         const post = await getBlogPostBySlug(slug);
         if (!post) return null;
-
-        const coverIsAbsolute = post.cover.startsWith("http://") || post.cover.startsWith("https://");
-
-        // Force production static path (/blog-assets) to avoid /api/blog-assets
-        const normalizedPath = post.cover.replace("/api/blog-assets", "/blog-assets");
-
-        const normalizedCover = coverIsAbsolute
-          ? normalizedPath
-          : `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+        const normalizedCover = post.cover?.replace(
+          "/api/blog-assets",
+          "/blog-assets"
+        );
 
         return {
           ...post,
-          cover: normalizedCover,
+          cover: normalizedCover
+            ? normalizedCover.startsWith("http://") ||
+              normalizedCover.startsWith("https://")
+              ? normalizedCover
+              : `${baseUrl}${normalizedCover.startsWith("/") ? "" : "/"}${normalizedCover}`
+            : undefined,
         };
       })
     );
