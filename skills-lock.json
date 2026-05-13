@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "sync-doc": {
+      "source": "Hexi1997/skills",
+      "sourceType": "github",
+      "skillPath": "skills/sync-doc/SKILL.md",
+      "computedHash": "d6a1151460d96004960465ed1701d6f2853f3b5bf055b7d75bad27901f2f3c73"
+    }
+  }
+}
