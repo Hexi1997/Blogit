@@ -1,7 +1,6 @@
 ---
 title: 'The Story Behind Blogit: Why I Built a Git-Powered, Local-First Blogging System'
 date: '2026-03-06'
-pinned: true
 tags:
   - 'Blogit'
 ---
