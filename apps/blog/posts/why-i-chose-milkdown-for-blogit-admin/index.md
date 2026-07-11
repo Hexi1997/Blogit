@@ -1,6 +1,7 @@
 ---
 title: 'Why I Chose Milkdown as the Markdown Editor for Blogit Admin'
 date: '2026-03-06'
+pinned: true
 cover: 'assets/cover.png'
 tags:
   - 'Blogit'
